@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MDR Post-Market Surveillance Checker · Virkka</title>
+<meta name="description" content="Answer three questions about your medical device and see which post-market surveillance reports the EU MDR requires, how often they are updated and who receives them.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="../../img/logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="../../css/site.css">
+<style>
+.pms { display: grid; grid-template-columns: minmax(0, 25rem) minmax(0, 1fr); gap: clamp(24px, 3.5vw, 48px); align-items: start; }
+.qcard { background: var(--white); border: 1px solid var(--line); padding: clamp(22px, 3vw, 34px); position: sticky; top: calc(var(--nav) + 20px); }
+.qcard h2 { font: 400 1.15rem/1.3 var(--sans); margin: 0 0 4px; }
+.qcard > p { margin: 0 0 22px; color: var(--muted); font-size: .92rem; }
+.qblock + .qblock { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--line-soft); }
+.qtitle { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 12px; font-weight: 500; font-size: .98rem; }
+.qtitle button { background: none; border: 0; padding: 0; color: var(--brand); font: 400 .82rem/1 var(--sans); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.def { margin: -4px 0 12px; padding: 12px 14px; background: #f6f9fd; border-left: 3px solid var(--brand); font-size: .86rem; color: var(--text); }
+.def[hidden] { display: none; }
+.classes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.cls { position: relative; cursor: pointer; }
+.cls input, .yn input { position: absolute; opacity: 0; pointer-events: none; }
+.cls .box { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 62px; border: 1px solid var(--line); background: var(--white); font: 400 1.2rem/1 var(--sans); color: var(--ink); transition: all .2s; }
+.cls small { display: block; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.cls:hover .box { border-color: #9fb0c2; }
+.cls input:checked + .box { border-color: var(--brand); background: var(--brand); color: var(--white); }
+.cls input:checked + .box small { color: rgba(255,255,255,.75); }
+.cls input:focus-visible + .box, .yn input:focus-visible + span { outline: 2px solid var(--brand); outline-offset: 2px; }
+.yn { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.yn label { cursor: pointer; position: relative; }
+.yn span { display: block; text-align: center; padding: 12px; border: 1px solid var(--line); font-size: .95rem; transition: all .2s; }
+.yn label:hover span { border-color: #9fb0c2; }
+.yn input:checked + span { border-color: var(--brand); background: #f6f9fd; box-shadow: inset 0 0 0 1px var(--brand); color: var(--ink); font-weight: 500; }
+
+.results { display: grid; gap: 16px; }
+.empty { background: var(--white); border: 1px dashed #c3ccd5; padding: 48px 32px; text-align: center; color: var(--muted); }
+.empty img { width: 220px; height: auto; display: block; margin: 0 auto 18px; }
+.summary { background: var(--navy); color: var(--white); padding: clamp(22px, 3vw, 32px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; border-bottom: 4px solid var(--yellow); }
+.summary div small { display: block; font: 500 .68rem/1.3 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 8px; }
+.summary div b { display: block; font: 300 1.35rem/1.25 var(--sans); }
+.summary div span { display: block; margin-top: 6px; font-size: .82rem; color: #b7c6d8; }
+.rcard { background: var(--white); border: 1px solid var(--line); padding: 22px 26px; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 16px; }
+.rcard .ic { grid-row: span 3; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--yellow-soft); color: var(--navy); font-weight: 500; font-size: .9rem; }
+.rcard.na .ic { background: var(--paper); color: var(--muted); }
+.rcard > :not(.ic) { grid-column: 2; }
+.rcard h3 { margin: 4px 0 0; font: 500 1.02rem/1.35 var(--sans); }
+.rcard p { margin: 4px 0 0; color: var(--text); font-size: .95rem; }
+.rcard ul { margin: 8px 0 0; padding-left: 1.1rem; color: var(--text); font-size: .93rem; }
+.rcard .ref { margin-top: 8px; font-size: .78rem; color: var(--muted); }
+.rcard.na h3 { color: var(--muted); }
+.warn { background: #fff8e6; border: 1px solid #f2d58a; padding: 16px 20px; font-size: .93rem; color: #6b4e00; }
+.due { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line-soft); font-size: .9rem; }
+.due input { font: 400 .95rem/1.3 var(--sans); padding: 8px 10px; border: 1px solid #c9d2db; }
+.due strong { font-weight: 500; color: var(--brand); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.actions .button { margin-top: 0; cursor: pointer; font-family: var(--sans); }
+.actions .button:not(.ghost) { border: 0; }
+.cta-box { background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--yellow); padding: 22px 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.cta-box p { margin: 0; max-width: 34rem; color: var(--text); }
+.cta-box b { display: block; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+.cta-box .button { margin-top: 0; }
+.sources { font-size: .82rem; color: var(--muted); }
+@media (max-width: 960px) {
+  .pms { grid-template-columns: 1fr; }
+  .qcard { position: static; }
+  .summary { grid-template-columns: 1fr; }
+}
+@media print {
+  nav, footer, .svc-head, .qcard, .actions, .cta-box, .scroll-cue { display: none !important; }
+  .band { padding: 0 !important; }
+  .pms { display: block; }
+  .rcard, .summary { break-inside: avoid; }
+  .summary { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav" aria-label="Main">
+  <div class="container">
+    <a class="brand" href="../../index.html" aria-label="Virkka home"><img src="../../img/logo-mark.png" alt=""><span>VIRKKA</span></a>
+    <button class="menu-btn" id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
+    <div class="links" id="links">
+      <a href="../../index.html#company">Company</a>
+      <a href="../../index.html#services">Services</a>
+      <a href="../../index.html#tools" class="active">Tools</a>
+      <a href="../../index.html#contact" class="contact-link">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="svc-head">
+  <div class="container">
+    <div class="intro-fade">
+      <p class="crumbs"><a href="../../index.html">Home</a> &nbsp;/&nbsp; <a href="../../index.html#tools">Tools</a></p>
+      <h1>MDR Post-Market Surveillance Checker</h1>
+      <p class="intro">Answer three questions about your device and see which post-market surveillance reports Regulation (EU) 2017/745 requires, how often they must be updated and who receives them. Every result cites the article it comes from.</p>
+    </div>
+    <img class="intro-fade" src="../../img/ill/medical.svg" alt="" width="240" height="200">
+  </div>
+</header>
+
+<main>
+<section class="band">
+  <div class="container pms">
+
+    <form class="qcard" id="q" novalidate>
+      <h2>Your device</h2>
+      <p>The results update as you answer.</p>
+
+      <div class="qblock">
+        <p class="qtitle" id="cls-label">Risk class</p>
+        <div class="classes" role="radiogroup" aria-labelledby="cls-label">
+          <label class="cls"><input type="radio" name="cls" value="I"><span class="box"><small>Class</small>I</span></label>
+          <label class="cls"><input type="radio" name="cls" value="IIa"><span class="box"><small>Class</small>IIa</span></label>
+          <label class="cls"><input type="radio" name="cls" value="IIb"><span class="box"><small>Class</small>IIb</span></label>
+          <label class="cls"><input type="radio" name="cls" value="III"><span class="box"><small>Class</small>III</span></label>
+        </div>
+      </div>
+
+      <div class="qblock">
+        <p class="qtitle"><span id="imp-label">Is it an implantable device?</span><button type="button" data-def="imp-def">What counts?</button></p>
+        <p class="def" id="imp-def" hidden>Any device, including those that are partially or wholly absorbed, which is intended to be totally introduced into the human body, or to replace an epithelial surface or the surface of the eye, by clinical intervention and which is intended to remain in place after the procedure. (Art. 2(5))</p>
+        <div class="yn" role="radiogroup" aria-labelledby="imp-label">
+          <label><input type="radio" name="imp" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="imp" value="no"><span>No</span></label>
+        </div>
+      </div>
+
+      <div class="qblock">
+        <p class="qtitle"><span id="cm-label">Is it a custom-made device?</span><button type="button" data-def="cm-def">What counts?</button></p>
+        <p class="def" id="cm-def" hidden>A device specifically made in accordance with a written prescription of an authorised person, giving specific design characteristics, and intended for the sole use of a particular patient. Mass-produced devices that need to be adapted to a professional user's specific requirements, and devices mass-produced by industrial processes in accordance with written prescriptions, are not custom-made. (Art. 2(3))</p>
+        <div class="yn" role="radiogroup" aria-labelledby="cm-label">
+          <label><input type="radio" name="cm" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="cm" value="no"><span>No</span></label>
+        </div>
+      </div>
+    </form>
+
+    <div class="results" id="results" aria-live="polite"></div>
+
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container foot-grid">
+    <div class="foot-brand">
+      <a class="brand" href="../../index.html"><img src="../../img/logo-mark.png" alt=""><span>VIRKKA</span></a>
+      <p>AI and automation consulting, and regulatory documentation for medical device manufacturers.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="../../projects/index.html">AI and automation consulting</a>
+      <a href="../../medical-devices/index.html">Medical device regulation</a>
+    </div>
+    <div>
+      <h4>Tools</h4>
+      <a href="../../tools/pms-requirements/index.html">MDR Post-Market Surveillance Checker</a>
+      <a href="../../tools/declaration-of-conformity/index.html">EU Declaration of Conformity Builder</a>
+      <a href="../../tools/udi-decoder/index.html">UDI Decoder</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <span class="foot-name">Ville Palola, Founder</span>
+      <a href="mailto:sales@virkka.com">sales@virkka.com</a>
+      <address>Jämeräntaival 7C<br>02150 Espoo, Finland</address>
+    </div>
+  </div>
+  <div class="container foot-bottom">
+    <p>© 2026 Virkka</p>
+    <p>Privacy: we process business contact details from public sources and from correspondence only to communicate with companies, and delete them on request (sales@virkka.com). This site uses no cookies or tracking.</p>
+  </div>
+</footer>
+
+<script src="../../js/site.js"></script>
+<script>
+(function () {
+  'use strict';
+  var form = document.getElementById('q'), out = document.getElementById('results');
+  var KEY = 'virkka-pms-checker-v1';
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function v(n) { var i = form.querySelector('input[name=' + n + ']:checked'); return i ? i.value : ''; }
+
+  document.querySelectorAll('[data-def]').forEach(function (b) {
+    b.addEventListener('click', function () { var d = document.getElementById(b.dataset.def); d.hidden = !d.hidden; b.textContent = d.hidden ? 'What counts?' : 'Hide'; });
+  });
+
+  function card(n, title, text, ref, opts) {
+    opts = opts || {};
+    var c = el('section', 'rcard' + (opts.na ? ' na' : ''));
+    c.appendChild(el('span', 'ic', opts.na ? '–' : String(n)));
+    c.appendChild(el('h3', null, title));
+    if (text) c.appendChild(el('p', null, text));
+    if (opts.list) { var ul = el('ul'); opts.list.forEach(function (x) { ul.appendChild(el('li', null, x)); }); c.appendChild(ul); }
+    if (opts.extra) c.appendChild(opts.extra);
+    if (ref) c.appendChild(el('p', 'ref', ref));
+    return c;
+  }
+
+  function addMonths(iso, m) {
+    var p = iso.split('-').map(Number); var d = new Date(Date.UTC(p[0], p[1] - 1 + m, p[2]));
+    if (d.getUTCDate() !== p[2]) d = new Date(Date.UTC(p[0], p[1] - 1 + m + 1, 0));   // e.g. 29 Feb -> end of month
+    var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return d.getUTCDate() + ' ' + names[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+  }
+
+  function render() {
+    var cls = v('cls'), imp = v('imp') === 'yes', cm = v('cm') === 'yes', answered = v('cls') && v('imp') && v('cm');
+    try { localStorage.setItem(KEY, JSON.stringify({ cls: v('cls'), imp: v('imp'), cm: v('cm') })); } catch (e) {}
+    out.textContent = '';
+    if (!answered) {
+      var e = el('div', 'empty');
+      var im = el('img'); im.src = '../../img/ill/medical.svg'; im.alt = ''; e.appendChild(im);
+      var left = ['cls', 'imp', 'cm'].filter(function (n) { return !v(n); }).length;
+      e.appendChild(el('p', null, left === 3 ? 'Answer the three questions to see the requirements for your device.' : left + (left === 1 ? ' question' : ' questions') + ' left.'));
+      out.appendChild(e); return;
+    }
+
+    var psur = cls !== 'I';
+    var nbSubmit = psur && (cls === 'III' || imp);   // Art. 86(2) concerns PSURs, so class I PMS reports are never submitted this way
+    var freq = cls === 'I' ? 'When necessary' : cls === 'IIa' ? 'At least every 2 years' : 'At least annually';
+    var freqNote = cls === 'I' ? 'No fixed interval' : cls === 'IIa' ? 'and whenever necessary' : 'Article 86(1)';
+
+    if (cls === 'I' && imp) {
+      out.appendChild(el('div', 'warn', 'Check the classification: under Rule 8 of Annex VIII, implantable devices are class IIa (if placed in the teeth), IIb or III, so an implantable class I device is not expected. The results below follow your answers.'));
+    }
+
+    var sum = el('div', 'summary');
+    [['Report', psur ? 'PSUR' : 'PMS report', psur ? 'Periodic safety update report' : 'Post-market surveillance report'],
+     ['Update', freq, freqNote],
+     ['Goes to', nbSubmit ? 'Notified body via EUDAMED' : psur ? 'Notified body' : 'Competent authority', nbSubmit ? 'The notified body adds its evaluation' : psur ? 'Made available, and to authorities on request' : 'On request']
+    ].forEach(function (x) { var d = el('div'); d.appendChild(el('small', null, x[0])); d.appendChild(el('b', null, x[1])); d.appendChild(el('span', null, x[2])); sum.appendChild(d); });
+    out.appendChild(sum);
+
+    var n = 1;
+    // main report
+    if (psur) {
+      var due = el('div', 'due');
+      var lab = el('label', null, 'Date of your last PSUR:'); lab.htmlFor = 'last';
+      var inp = el('input'); inp.type = 'date'; inp.id = 'last';
+      var res = el('span');
+      inp.addEventListener('input', function () {
+        res.textContent = '';
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(inp.value)) return;
+        res.appendChild(document.createTextNode('Next update due '));
+        res.appendChild(el('strong', null, 'by ' + addMonths(inp.value, cls === 'IIa' ? 24 : 12)));
+        if (cls === 'IIa') res.appendChild(document.createTextNode(', or earlier when necessary'));
+      });
+      due.appendChild(lab); due.appendChild(inp); due.appendChild(res);
+      out.appendChild(card(n++, 'Periodic safety update report (PSUR)',
+        'Prepare a PSUR for each device, or for each category or group of devices where relevant, summarising the results and conclusions of your post-market surveillance data. ' +
+        (cls === 'IIa' ? 'Update it when necessary and at least every two years.' : 'Update it at least annually.'),
+        'Regulation (EU) 2017/745, Article 86(1)',
+        { list: ['Conclusions of the benefit-risk determination', 'Main findings of the post-market clinical follow-up (PMCF)', 'Sales volume, and an estimate of the size and characteristics of the population using the device and, where practicable, how often it is used'], extra: due }));
+      out.appendChild(card(n++, nbSubmit ? 'Submit the PSUR to your notified body through EUDAMED' : 'Make the PSUR available to your notified body',
+        nbSubmit ? 'For class III and implantable devices, the PSUR is submitted through EUDAMED to the notified body involved in the conformity assessment. The notified body reviews it and adds its evaluation, and both are available to competent authorities.'
+                 : 'Make the PSUR available to the notified body involved in the conformity assessment and, on request, to competent authorities.',
+        'Article 86(' + (nbSubmit ? '2' : '3') + ')'));
+      out.appendChild(card(n++, 'Keep it with the device documentation',
+        cm ? 'For custom-made devices, the PSUR is part of the documentation referred to in Section 2 of Annex XIII.' : 'The PSUR is part of the technical documentation specified in Annexes II and III.',
+        'Article 86(1)'));
+    } else {
+      out.appendChild(card(n++, 'Post-market surveillance report (PMS report)',
+        'Prepare a report summarising the results and conclusions of your post-market surveillance data, with a rationale and description of any preventive and corrective actions taken. Update it when necessary and make it available to the competent authority on request.',
+        'Regulation (EU) 2017/745, Article 85'));
+    }
+
+    // SSCP and PMCF annual updates
+    if (cls === 'III' || imp) {
+      if (cm) out.appendChild(card(0, 'Summary of safety and clinical performance (SSCP): not required', 'The SSCP obligation does not apply to custom-made devices.', 'Article 32(1)', { na: true }));
+      else out.appendChild(card(n++, 'Summary of safety and clinical performance (SSCP)',
+        'Draw up an SSCP written clearly for the intended user and, if relevant, the patient. The notified body validates it and uploads it to EUDAMED, where it is public. Mention on the label or instructions for use where it is available.',
+        'Article 32'));
+      out.appendChild(card(n++, 'Update the PMCF evaluation report at least annually',
+        'Update the PMCF evaluation report' + (cm ? '' : ' and, if indicated, the SSCP') + ' at least annually with clinical data from your PMCF plan and post-market surveillance plan.',
+        'Article 61(11)'));
+    }
+
+    // always
+    out.appendChild(card(n++, 'Post-market surveillance plan',
+      'Base your post-market surveillance system on a plan meeting the requirements of Section 1 of Annex III.' + (cm ? '' : ' The plan is part of the technical documentation in Annex II.'),
+      'Article 84'));
+    out.appendChild(card(n++, 'Vigilance: report serious incidents and field safety corrective actions through EUDAMED', null, 'Articles 87 and 88',
+      { list: ['Serious incident: immediately once a causal relationship is established or reasonably possible, and no later than 15 days after becoming aware of it',
+               'Death or unanticipated serious deterioration in health: no later than 10 days after becoming aware',
+               'Serious public health threat: no later than 2 days after becoming aware',
+               'Field safety corrective actions: in advance of the action, except in urgent cases',
+               'Trend reporting: statistically significant increases in non-serious incidents or expected side-effects'] }));
+
+    var acts = el('div', 'actions');
+    var pr = el('button', 'button ghost', 'Print or save as PDF'); pr.type = 'button'; pr.addEventListener('click', function () { window.print(); });
+    acts.appendChild(pr);
+    out.appendChild(acts);
+
+    var cta = el('div', 'cta-box');
+    var t = el('p'); t.appendChild(el('b', null, psur ? 'Need the data for your PSUR?' : 'Need help with your PMS report?'));
+    t.appendChild(document.createTextNode('We collect literature, adverse event and recall data and similar devices in EUDAMED, structured following MDCG 2022-21.'));
+    var a = el('a', 'button', 'Medical device service →'); a.href = '../../medical-devices/index.html';
+    cta.appendChild(t); cta.appendChild(a); out.appendChild(cta);
+    out.appendChild(el('p', 'sources', 'Based on Regulation (EU) 2017/745 as consolidated on EUR-Lex (version of 19 July 2026). This overview covers the post-market surveillance obligations in Articles 32, 61(11) and 83 to 88 and does not replace the full text or the MDCG guidance.'));
+  }
+
+  form.addEventListener('change', render);
+  try {
+    var s = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (s) ['cls', 'imp', 'cm'].forEach(function (n) { if (s[n]) { var i = form.querySelector('input[name=' + n + '][value="' + s[n] + '"]'); if (i) i.checked = true; } });
+  } catch (e) {}
+  render();
+})();
+</script>
+</body>
+</html>

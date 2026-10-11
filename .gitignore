@@ -1,0 +1,3 @@
+# local backups of earlier page versions, never publish
+*_backup.html
+.DS_Store

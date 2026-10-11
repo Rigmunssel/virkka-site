@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Declaration of Conformity Builder · Virkka</title>
+<meta name="description" content="Build an EU declaration of conformity for electrical equipment or medical devices, checked element by element against the legal text.">
+<link rel="icon" href="../../img/logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root {
+  --snow: #f3f5f7; --white: #ffffff; --ink: #1b2229; --slate: #66717c; --fjord: #3b444d; --spruce: #003580; --line: #dde2e7;
+  --warn: #8a5a00; --warn-bg: #fdf5e4; --err: #a1322b; --err-bg: #fbecea; --ok-bg: #eef2f7;
+  --sans: "Jost", "Futura", "Century Gothic", system-ui, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --nav: 68px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--nav) + 16px); }
+body { margin: 0; background: var(--snow); color: var(--ink); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: var(--fjord); }
+:focus-visible { outline: 2px solid var(--spruce); outline-offset: 2px; }
+.container { width: 100%; max-width: 88rem; margin: 0 auto; padding-inline: 24px; }
+
+nav { position: sticky; top: 0; height: var(--nav); background: var(--white); border-bottom: 1px solid var(--line); z-index: 10; }
+nav .container { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 12px; font: 400 1.05rem/1 var(--sans); color: var(--ink); text-decoration: none; letter-spacing: .32em; }
+.brand img { width: 38px; height: 38px; }
+.back { color: var(--slate); text-decoration: none; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; }
+.back:hover { color: var(--ink); }
+
+header.intro { padding-block: 48px 28px; }
+.eyebrow { font: 500 .78rem/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--spruce); margin: 0 0 .9rem; }
+header.intro h1 { font: 400 clamp(1.5rem, 3vw, 2.1rem)/1.25 var(--sans); letter-spacing: .04em; margin: 0 0 .8rem; }
+header.intro p { margin: 0; max-width: 46rem; color: #2c3d47; }
+
+.workspace { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); gap: 28px; align-items: start; padding-bottom: 64px; }
+
+/* form */
+.panel { background: var(--white); border: 1px solid var(--line); border-radius: 6px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+.seg { display: grid; grid-template-columns: 1fr 1fr; width: 100%; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.seg button { border: 0; background: var(--snow); padding: .65rem .5rem; font: 400 .9rem/1.2 var(--sans); color: var(--slate); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+.btn { background: transparent; color: var(--ink); border: 1px solid var(--ink); border-radius: 3px; padding: .5rem .85rem; font: 400 .85rem/1 var(--sans); letter-spacing: .04em; cursor: pointer; }
+.btn:hover { background: var(--ink); color: var(--white); }
+.btn.primary { background: #f6b800; border-color: #f6b800; color: #0a1f3d; font-weight: 500; }
+.btn.primary:hover { background: #e0a600; border-color: #e0a600; }
+.btn.quiet { border-color: var(--line); color: var(--slate); }
+.btn.quiet:hover { background: var(--snow); color: var(--ink); }
+fieldset { border: 0; margin: 0; padding: 18px; border-bottom: 1px solid var(--line); }
+fieldset:last-child { border-bottom: 0; }
+legend { padding: 0; font: 500 .78rem/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--fjord); margin-bottom: .2rem; }
+.cite { display: block; font-size: .78rem; color: var(--slate); margin-bottom: .8rem; }
+label { display: block; font-size: .88rem; color: #2c3d47; margin: .7rem 0 .25rem; }
+label .opt { color: var(--slate); font-size: .8rem; }
+input[type=text], input[type=date], textarea, select { width: 100%; font: 400 .95rem/1.4 var(--sans); color: var(--ink); background: var(--white);
+  border: 1px solid #cdd4db; border-radius: 3px; padding: .5rem .6rem; }
+textarea { resize: vertical; min-height: 4.2rem; }
+input:focus, textarea:focus, select:focus { border-color: var(--fjord); outline: none; box-shadow: 0 0 0 3px rgba(0,53,128,.15); }
+.check { display: flex; gap: .55rem; align-items: flex-start; margin: .55rem 0; font-size: .9rem; color: #2c3d47; }
+.check input { margin-top: .3rem; accent-color: var(--spruce); }
+.check small { display: block; color: var(--slate); font-size: .78rem; }
+.hint { font-size: .8rem; color: var(--slate); margin: .3rem 0 0; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.std { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) auto; gap: 6px; margin-top: 6px; }
+.std button { border: 1px solid var(--line); background: var(--white); color: var(--slate); border-radius: 3px; width: 2.2rem; cursor: pointer; font-size: 1rem; }
+.std button:hover { color: var(--err); border-color: var(--err); }
+.add { margin-top: 8px; }
+[hidden] { display: none !important; }
+
+/* right column */
+.side { position: sticky; top: calc(var(--nav) + 16px); display: grid; gap: 18px; }
+.status { padding: 16px 18px; }
+.status-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.status-head strong { font-weight: 500; }
+.meter { height: 6px; background: var(--line); border-radius: 3px; margin: 10px 0 12px; overflow: hidden; }
+.meter i { display: block; height: 100%; background: #f6b800; width: 0; transition: width .25s; }
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 15rem; overflow: auto; }
+.checklist li { display: grid; grid-template-columns: 1.3rem 1fr; gap: 4px; font-size: .85rem; padding: 4px 6px; border-radius: 3px; }
+.checklist li::before { font-weight: 500; text-align: center; }
+.checklist li.ok::before { content: "✓"; color: var(--spruce); }
+.checklist li.err { background: var(--err-bg); }
+.checklist li.err::before { content: "!"; color: var(--err); }
+.checklist li.warn { background: var(--warn-bg); }
+.checklist li.warn::before { content: "?"; color: var(--warn); }
+.checklist li span small { color: var(--slate); display: block; font-size: .76rem; }
+
+.preview-wrap { background: #e6eaee; border: 1px solid var(--line); border-radius: 6px; padding: 24px; overflow: auto; }
+
+/* the document */
+.doc { position: relative; background: var(--white); color: #111; width: 100%; max-width: 210mm; margin: 0 auto; padding: 18mm 18mm 16mm;
+       box-shadow: 0 1px 3px rgba(15,29,38,.12), 0 8px 24px rgba(15,29,38,.08); font: 400 10.5pt/1.5 var(--serif); overflow: hidden; }
+.doc .mark { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.doc .mark span { transform: rotate(-32deg); font: 600 64pt/1 var(--sans); letter-spacing: .2em; color: rgba(161,50,43,.09); white-space: nowrap; }
+.doc .mark.sample span { color: rgba(21,24,27,.07); }
+.doc h2 { font: 600 15pt/1.3 var(--serif); text-align: center; margin: 0; letter-spacing: .02em; }
+.doc .docno { text-align: center; margin: 4px 0 0; font-size: 10pt; color: #333; }
+.doc .rule { border: 0; border-top: 1.5px solid #111; margin: 10px 0 14px; }
+.doc ol.items { list-style: none; margin: 0; padding: 0; counter-reset: item; }
+.doc ol.items > li { display: grid; grid-template-columns: 2.2em 1fr; padding: 7px 0; border-bottom: 1px solid #e3e3e3; break-inside: avoid; }
+.doc ol.items > li:last-child { border-bottom: 0; }
+.doc .n { font-weight: 600; }
+.doc .h { font-weight: 600; display: block; }
+.doc .v { display: block; white-space: pre-wrap; }
+.doc .v.missing { color: #a1322b; font-style: italic; }
+.doc ul.v { list-style: none; padding: 0; margin: 2px 0 0; white-space: normal; }
+.doc ul.v li { padding-left: 1em; text-indent: -1em; margin: 1px 0; }
+.doc ul.v li::before { content: "– "; }
+.doc .sig { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; break-inside: avoid; }
+.doc .sig .full { grid-column: 1 / -1; }
+.doc .sig .lab { font-size: 8.5pt; color: #555; display: block; }
+.doc .sig .line { border-bottom: 1px solid #111; min-height: 1.6em; display: block; }
+.doc .foot { margin-top: 18px; font-size: 7.5pt; color: #666; border-top: 1px solid #e3e3e3; padding-top: 6px; }
+
+.about { font-size: .85rem; color: var(--slate); padding: 16px 18px; }
+.about p { margin: 0; }
+.about p + p { margin-top: .5rem; }
+
+
+/* footer (same as the main site) */
+footer { background: #0a1f3d; color: #a9b8cc; font-size: .9rem; border-top: 4px solid #f6b800; }
+footer .container { max-width: 76rem; }
+.foot-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 40px; padding-block: 64px 48px; }
+.foot-brand .brand { color: #fff; }
+.foot-brand .brand img { filter: brightness(0) invert(1); }
+.foot-brand p { margin: 20px 0 0; max-width: 20rem; line-height: 1.6; }
+footer h4 { margin: 4px 0 16px; font: 500 .72rem/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: #fff; }
+.foot-grid a { display: block; color: #c8cfd6; text-decoration: none; padding: 4px 0; }
+.foot-grid a:hover { color: #f6b800; }
+.foot-grid .brand { display: flex; padding: 0; }
+.foot-name { display: block; color: #fff; padding: 4px 0; }
+footer address { font-style: normal; margin-top: 8px; line-height: 1.6; }
+.foot-bottom { display: flex; justify-content: space-between; gap: 12px 40px; flex-wrap: wrap; padding-block: 0 28px; font-size: .8rem; color: #8a949e;
+  background: linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.1)) content-box 0 0 / 100% 1px no-repeat; }
+.foot-bottom p { margin: 22px 0 0; max-width: 46rem; }
+@media (min-width: 761px) { .foot-bottom { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 0 40px; } .foot-bottom p + p { grid-column: 2 / 5; max-width: none; } }
+@media (max-width: 760px) { .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; } .foot-brand { grid-column: 1 / -1; } }
+@media print { footer { display: none !important; } }
+
+/* nav links (match the main site) */
+.navlinks { display: flex; align-items: center; gap: 4px; }
+.navlinks a { padding: 10px 14px; text-decoration: none; color: var(--fjord); font-size: .8rem; letter-spacing: .16em; text-transform: uppercase; }
+.navlinks a:hover { color: var(--ink); }
+.navlinks a.navcta { margin-left: 8px; background: #f6b800; color: #0a1f3d; font-weight: 500; }
+.navlinks a.navcta:hover { background: #e0a600; }
+.intro-points { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 26px; font-size: .9rem; color: var(--slate); }
+.intro-points li { position: relative; padding-left: 22px; }
+.intro-points li::before { content: ""; position: absolute; left: 0; top: .35em; width: 13px; height: 13px; border-radius: 50%; background: #f6b800; }
+.intro-points li::after { content: ""; position: absolute; left: 3.6px; top: calc(.35em + 4px); width: 5px; height: 2.6px; border: solid #0a1f3d; border-width: 0 0 1.5px 1.5px; transform: rotate(-45deg); }
+
+/* saved indicator */
+.saved { margin-left: auto; align-self: center; font-size: .78rem; color: var(--slate); opacity: 0; transition: opacity .4s; }
+.saved.on { opacity: 1; }
+.saved.on::before { content: "● "; color: #2e8b57; font-size: .6rem; vertical-align: 1px; }
+
+/* numbered sections with progress */
+form.panel { counter-reset: sec; }
+fieldset:not([hidden]) { counter-increment: sec; }
+legend { display: flex; align-items: center; gap: 10px; }
+legend::before { content: counter(sec); display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #b9c4cf; font-size: .7rem; letter-spacing: 0; color: var(--slate); flex: none; }
+fieldset.done legend::before { content: "✓"; background: #f6b800; border-color: #f6b800; color: #0a1f3d; font-weight: 600; }
+fieldset.todo legend::before { border-color: var(--spruce); color: var(--spruce); }
+
+/* fields still needed */
+input.bad, textarea.bad, select.bad { border-color: #c2483f; background: #fff8f7; }
+label.check.bad span { color: #a1322b; }
+
+/* checklist: missing items take you to the field */
+.checklist button.fix { all: unset; cursor: pointer; display: block; }
+.checklist button.fix small { display: block; color: var(--slate); font-size: .76rem; }
+.checklist button.fix small b { color: #a1322b; font-weight: 500; }
+.checklist button.fix:hover { text-decoration: underline; text-decoration-color: #c2483f; text-underline-offset: 3px; }
+.checklist button.fix:focus-visible { outline: 2px solid var(--spruce); outline-offset: 2px; }
+
+.exports { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 14px; }
+.exports .btn { padding: .62rem .95rem; }
+
+/* phone status bar */
+.mbar { display: none; }
+
+@media (max-width: 1020px) {
+  .mbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; align-items: center; gap: 14px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+          background: #0a1f3d; color: #fff; font-size: .85rem; box-shadow: 0 -8px 24px rgba(10,31,61,.2); }
+  .mbar > div { flex: 1; display: grid; gap: 6px; }
+  .mbar i { display: block; height: 3px; background: rgba(255,255,255,.2); }
+  .mbar b { display: block; height: 100%; width: 0; background: #f6b800; transition: width .25s; }
+  .mbar button { background: #f6b800; color: #0a1f3d; border: 0; padding: .6rem .9rem; font: 500 .85rem/1 var(--sans); cursor: pointer; }
+  body { padding-bottom: 70px; }
+  .workspace { grid-template-columns: 1fr; }
+  .side { position: static; }
+}
+@media (max-width: 560px) {
+  .navlinks a:not(.navcta) { display: none; }
+  .container { padding-inline: 16px; }
+  .brand span { display: none; }
+  .preview-wrap { padding: 10px; }
+  .doc { padding: 10mm 8mm; font-size: 9.5pt; }
+  .row2 { grid-template-columns: 1fr; }
+  .std { grid-template-columns: 1fr auto; }
+  .std input:nth-child(2) { grid-column: 1; grid-row: 2; }
+}
+
+@page { size: A4; margin: 16mm 16mm 14mm; }
+@media print {
+  body { background: #fff; }
+  nav, header.intro, .panel, .status, .about, .no-print, .mbar { display: none !important; }
+  body { padding-bottom: 0; }
+  .workspace, .side, .container { display: block; padding: 0; margin: 0; max-width: none; position: static; }
+  .preview-wrap { background: none; border: 0; padding: 0; overflow: visible; }
+  .doc { box-shadow: none; padding: 0; max-width: none; overflow: visible; }
+  .doc .mark { position: fixed; }
+  .doc { font-size: 9.5pt; line-height: 1.42; }
+  .doc ol.items > li { padding: 4px 0; }
+  .doc .rule { margin: 8px 0 8px; }
+  .doc .sig { margin-top: 12px; gap: 6px 28px; }
+  .doc .foot { margin-top: 10px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a class="brand" href="../../index.html" aria-label="Virkka home">
+      <img src="../../img/logo-mark.png" alt="">
+      <span>VIRKKA</span>
+    </a>
+    <div class="navlinks">
+      <a href="../../index.html#company">Company</a>
+      <a href="../../index.html#services">Services</a>
+      <a href="../../index.html#tools">Tools</a>
+      <a class="navcta" href="../../index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="intro">
+  <div class="container">
+    <p class="eyebrow">Free tool</p>
+    <h1>EU Declaration of Conformity Builder</h1>
+    <p>Fill in the product details and the builder writes the declaration in the structure set out in EU law, with the required legal statements and full publication references. It shows what is still missing and takes you to the field to fix it.</p>
+    <ul class="intro-points"><li>Electrical equipment (LVD, EMC, RoHS) and medical devices (MDR)</li><li>Download as Word or PDF</li><li>Nothing is sent anywhere. Your draft stays in this browser.</li></ul>
+  </div>
+</header>
+
+<main class="container workspace">
+
+  <form class="panel" id="form" autocomplete="off" novalidate>
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Product type">
+        <button type="button" data-tpl="eee" aria-pressed="true">Electrical equipment</button>
+        <button type="button" data-tpl="mdr" aria-pressed="false">Medical device</button>
+      </div>
+      <button type="button" class="btn quiet" id="sample">Load example</button>
+      <button type="button" class="btn quiet" id="clear">Start over</button>
+      <span class="saved" id="saved" aria-live="polite"></span>
+    </div>
+
+    <!-- Electrical: legislation -->
+    <fieldset data-for="eee">
+      <legend>Union legislation</legend>
+      <span class="cite">One declaration covers every act that applies (Directive 2014/35/EU, Art. 15(3); Directive 2014/30/EU, Art. 15(3))</span>
+      <label class="check"><input type="checkbox" name="act_lvd"><span>Low Voltage Directive 2014/35/EU<small>Rated 50–1 000 V AC or 75–1 500 V DC (Art. 1)</small></span></label>
+      <label class="check"><input type="checkbox" name="act_emc"><span>EMC Directive 2014/30/EU<small>Electromagnetic compatibility</small></span></label>
+      <label class="check"><input type="checkbox" name="act_rohs"><span>RoHS Directive 2011/65/EU<small>Restriction of hazardous substances</small></span></label>
+    </fieldset>
+
+    <!-- Electrical: product -->
+    <fieldset data-for="eee">
+      <legend>Product</legend>
+      <span class="cite">Annex IV, points 1 and 4</span>
+      <label for="docno">Declaration number <span class="opt">(optional)</span></label>
+      <input type="text" id="docno" name="docno">
+      <label for="model">Product model / product (type, batch or serial number)</label>
+      <input type="text" id="model" name="model">
+      <label for="object">Object of the declaration <span class="opt">(identification allowing traceability)</span></label>
+      <textarea id="object" name="object"></textarea>
+    </fieldset>
+
+    <!-- Medical device: device -->
+    <fieldset data-for="mdr" hidden>
+      <legend>Device</legend>
+      <span class="cite">Regulation (EU) 2017/745, Annex IV, points 3–5</span>
+      <label for="budi">Basic UDI-DI</label>
+      <input type="text" id="budi" name="budi">
+      <label for="trade">Product or trade name</label>
+      <input type="text" id="trade" name="trade">
+      <label for="code">Product code, catalogue number or other reference <span class="opt">(optional if the Basic UDI-DI identifies the device)</span></label>
+      <input type="text" id="code" name="code">
+      <label for="purpose">Intended purpose</label>
+      <textarea id="purpose" name="purpose"></textarea>
+      <div class="row2">
+        <div>
+          <label for="cls">Risk class (Annex VIII)</label>
+          <select id="cls" name="cls">
+            <option value="">Select…</option>
+            <option value="I">Class I</option>
+            <option value="IIa">Class IIa</option>
+            <option value="IIb">Class IIb</option>
+            <option value="III">Class III</option>
+          </select>
+        </div>
+        <div>
+          <label for="rule">Classification rule <span class="opt">(optional)</span></label>
+          <input type="text" id="rule" name="rule" placeholder="e.g. 1">
+        </div>
+      </div>
+      <div id="cls1flags" hidden>
+        <label class="check"><input type="checkbox" name="cls1_special"><span>Placed on the market sterile, has a measuring function, or is a reusable surgical instrument<small>A notified body is then involved (Art. 52(7))</small></span></label>
+      </div>
+    </fieldset>
+
+    <!-- Manufacturer (both) -->
+    <fieldset>
+      <legend>Manufacturer</legend>
+      <span class="cite" id="mfr-cite">Annex IV, point 2</span>
+      <label for="mname">Name or registered trade name</label>
+      <input type="text" id="mname" name="mname">
+      <label for="maddr">Address</label>
+      <textarea id="maddr" name="maddr"></textarea>
+      <div data-for="mdr" hidden>
+        <label for="msrn">SRN <span class="opt">(if already issued, format XX-MF-000000000)</span></label>
+        <input type="text" id="msrn" name="msrn">
+        <label class="check"><input type="checkbox" name="non_eu"><span>Manufacturer is not established in a Member State<small>A sole authorised representative must be designated (Art. 11(1))</small></span></label>
+      </div>
+      <div data-for="eee">
+        <label class="check"><input type="checkbox" name="has_ar"><span>Issued by an authorised representative</span></label>
+      </div>
+      <div id="ar" hidden>
+        <label for="arname">Authorised representative</label>
+        <input type="text" id="arname" name="arname">
+        <label for="araddr">Authorised representative's address</label>
+        <textarea id="araddr" name="araddr"></textarea>
+        <div data-for="mdr" hidden>
+          <label for="arsrn">Authorised representative's SRN <span class="opt">(if issued, format XX-AR-000000000)</span></label>
+          <input type="text" id="arsrn" name="arsrn">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Electrical: standards -->
+    <fieldset data-for="eee">
+      <legend>Standards and specifications</legend>
+      <span class="cite">Annex IV, point 6. Under Directive 2014/30/EU each reference must include the date of the standard.</span>
+      <div id="stds"></div>
+      <button type="button" class="btn quiet add" id="addstd">+ Add standard</button>
+    </fieldset>
+
+    <!-- Medical device: other legislation and CS -->
+    <fieldset data-for="mdr" hidden>
+      <legend>Conformity</legend>
+      <span class="cite">Annex IV, points 6 and 7</span>
+      <label for="otherleg">Other Union legislation requiring a declaration <span class="opt">(optional, one per line)</span></label>
+      <textarea id="otherleg" name="otherleg"></textarea>
+      <label for="cs">Common specifications (CS) used <span class="opt">(one per line, blank if none)</span></label>
+      <textarea id="cs" name="cs"></textarea>
+    </fieldset>
+
+    <!-- Notified body -->
+    <fieldset id="nbset">
+      <legend>Notified body</legend>
+      <span class="cite" id="nb-cite">Annex IV, point 8</span>
+      <label class="check" id="nb-toggle"><input type="checkbox" name="nb_on"><span>A notified body took part in conformity assessment</span></label>
+      <div id="nb" hidden>
+        <div class="row2">
+          <div><label for="nbname">Name</label><input type="text" id="nbname" name="nbname"></div>
+          <div><label for="nbno">Identification number</label><input type="text" id="nbno" name="nbno" inputmode="numeric" maxlength="4" placeholder="4 digits"></div>
+        </div>
+        <label for="nbproc">Conformity assessment procedure / intervention</label>
+        <input type="text" id="nbproc" name="nbproc">
+        <label for="nbcert">Certificate(s) issued</label>
+        <input type="text" id="nbcert" name="nbcert">
+      </div>
+    </fieldset>
+
+    <!-- Additional + signature -->
+    <fieldset>
+      <legend>Additional information and signature</legend>
+      <span class="cite" id="sig-cite">Annex IV, final element</span>
+      <label for="extra">Additional information <span class="opt">(optional)</span></label>
+      <textarea id="extra" name="extra"></textarea>
+      <label for="behalf">Signed for and on behalf of <span class="opt">(defaults to the manufacturer)</span></label>
+      <input type="text" id="behalf" name="behalf">
+      <div class="row2">
+        <div><label for="place">Place of issue</label><input type="text" id="place" name="place"></div>
+        <div><label for="date">Date of issue</label><input type="date" id="date" name="date"></div>
+        <div><label for="signame">Name</label><input type="text" id="signame" name="signame"></div>
+        <div><label for="sigfn">Function</label><input type="text" id="sigfn" name="sigfn"></div>
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="side">
+    <section class="panel status" aria-live="polite">
+      <div class="status-head">
+        <strong id="status-title">Checking…</strong>
+      </div>
+      <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+      <div class="exports">
+        <button type="button" class="btn primary" id="print">Print / save as PDF</button>
+        <button type="button" class="btn" id="word">Download Word</button>
+        <button type="button" class="btn quiet" id="copytext">Copy text</button>
+      </div>
+      <ul class="checklist" id="checklist"></ul>
+    </section>
+
+    <div class="preview-wrap">
+      <article class="doc" id="doc" aria-label="Declaration preview"></article>
+    </div>
+
+    <section class="panel about">
+      <p><strong style="font-weight:500;color:var(--ink)">Sources.</strong> Directive 2014/35/EU, Annex IV; Directive 2014/30/EU, Annex IV; Directive 2011/65/EU, Annex VI; Regulation (EU) 2017/745, Annex IV, as consolidated on EUR-Lex.</p>
+      <p>The manufacturer remains responsible for the content of the declaration, for choosing the applicable legislation and standards, and for translating it into the languages each Member State requires.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="container foot-grid">
+    <div class="foot-brand">
+      <a class="brand" href="../../index.html"><img src="../../img/logo-mark.png" alt=""><span>VIRKKA</span></a>
+      <p>AI and automation consulting, and regulatory documentation for medical device manufacturers.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="../../projects/index.html">AI and automation consulting</a>
+      <a href="../../medical-devices/index.html">Medical device regulation</a>
+    </div>
+    <div>
+      <h4>Tools</h4>
+      <a href="../../tools/pms-requirements/index.html">MDR Post-Market Surveillance Checker</a>
+      <a href="../../tools/declaration-of-conformity/index.html">EU Declaration of Conformity Builder</a>
+      <a href="../../tools/udi-decoder/index.html">UDI Decoder</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <span class="foot-name">Ville Palola, Founder</span>
+      <a href="mailto:sales@virkka.com">sales@virkka.com</a>
+      <address>Jämeräntaival 7C<br>02150 Espoo, Finland</address>
+    </div>
+  </div>
+  <div class="container foot-bottom">
+    <p>© 2026 Virkka</p>
+    <p>Privacy: we process business contact details from public sources and from correspondence only to communicate with companies, and delete them on request (sales@virkka.com). This site uses no cookies or tracking.</p>
+  </div>
+</footer>
+
+<div class="mbar" aria-hidden="true">
+  <div><span id="mbar-text">Checking…</span><i><b id="mbar-meter"></b></i></div>
+  <button type="button" id="mbar-go">Preview ↓</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ACTS = {
+    lvd: 'Directive 2014/35/EU of the European Parliament and of the Council of 26 February 2014 on the harmonisation of the laws of the Member States relating to the making available on the market of electrical equipment designed for use within certain voltage limits (OJ L 96, 29.3.2014, p. 357)',
+    emc: 'Directive 2014/30/EU of the European Parliament and of the Council of 26 February 2014 on the harmonisation of the laws of the Member States relating to electromagnetic compatibility (OJ L 96, 29.3.2014, p. 79)',
+    rohs: 'Directive 2011/65/EU of the European Parliament and of the Council of 8 June 2011 on the restriction of the use of certain hazardous substances in electrical and electronic equipment (OJ L 174, 1.7.2011, p. 88), as amended',
+    mdr: 'Regulation (EU) 2017/745 of the European Parliament and of the Council of 5 April 2017 on medical devices (OJ L 117, 5.5.2017, p. 1), as amended'
+  };
+
+  var SAMPLES = {
+    eee: {
+      act_emc: true, act_rohs: true,
+      docno: 'DoC-EX-2026-014',
+      model: 'EX-IS8 industrial Ethernet switch, 8 ports, 24 V DC. Serial numbers EXS26-0001 onwards',
+      object: 'Unmanaged industrial Ethernet switch for DIN-rail mounting, eight 10/100/1000BASE-T ports, supply 24 V DC (12–48 V DC), for use in industrial environments. Identified by model number and serial number on the rating label.',
+      mname: 'Example Industrial Oy',
+      maddr: 'Esimerkkikatu 1\n00100 Helsinki\nFinland',
+      stds: [
+        ['EN IEC 61000-6-2:2019', 'Electromagnetic compatibility (EMC) – Part 6-2: Generic standards – Immunity standard for industrial environments'],
+        ['EN IEC 61000-6-4:2019', 'Electromagnetic compatibility (EMC) – Part 6-4: Generic standards – Emission standard for industrial environments'],
+        ['EN IEC 63000:2018', 'Technical documentation for the assessment of electrical and electronic products with respect to the restriction of hazardous substances']
+      ],
+      extra: 'The rated supply voltage (24 V DC) is below the 75 V DC lower limit of Directive 2014/35/EU, which therefore does not apply.',
+      place: 'Helsinki', signame: 'Maria Esimerkki', sigfn: 'Head of Quality'
+    },
+    mdr: {
+      budi: 'EXAMPLE-BASIC-UDI-DI',
+      trade: 'Example Folding Wheelchair',
+      code: 'Model EFW-1, catalogue numbers EFW-1-40, EFW-1-45, EFW-1-50',
+      purpose: 'Manually propelled folding wheelchair intended to provide mobility to persons with limited walking ability, for indoor and outdoor use.',
+      cls: 'I', rule: '1',
+      mname: 'Example Mobility Oy',
+      maddr: 'Esimerkkikatu 1\n00100 Helsinki\nFinland',
+      extra: 'Standards applied:\nEN ISO 14971:2019+A11:2021 Medical devices – Application of risk management to medical devices\nEN ISO 15223-1:2021 Medical devices – Symbols to be used with information to be supplied by the manufacturer – Part 1: General requirements',
+      place: 'Helsinki', signame: 'Maria Esimerkki', sigfn: 'Person responsible for regulatory compliance'
+    }
+  };
+
+  var form = document.getElementById('form');
+  var docEl = document.getElementById('doc');
+  var stdsEl = document.getElementById('stds');
+  var tpl = 'eee';
+  var isSample = false;
+  var store = { eee: {}, mdr: {} };   // per-template values, so switching back and forth keeps input
+
+  function $(n) { return form.elements[n]; }
+  function val(n) { var e = $(n); return e ? (e.type === 'checkbox' ? e.checked : e.value.trim()) : ''; }
+  function lines(s) { return s.split('\n').map(function (x) { return x.trim(); }).filter(Boolean); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function fmtDate(iso) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return '';
+    var p = iso.split('-').map(Number);
+    var m = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return p[2] + ' ' + m[p[1] - 1] + ' ' + p[0];
+  }
+  function today() {
+    var d = new Date(), z = function (n) { return (n < 10 ? '0' : '') + n; };
+    return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate());
+  }
+
+  /* ---------- standards rows ---------- */
+  function addStd(ref, title) {
+    var row = el('div', 'std');
+    var a = el('input'); a.type = 'text'; a.placeholder = 'EN 00000:2020'; a.value = ref || ''; a.setAttribute('aria-label', 'Standard reference with date');
+    var b = el('input'); b.type = 'text'; b.placeholder = 'Title (optional)'; b.value = title || ''; b.setAttribute('aria-label', 'Standard title');
+    var x = el('button', null, '×'); x.type = 'button'; x.setAttribute('aria-label', 'Remove standard');
+    x.addEventListener('click', function () { row.remove(); update(); });
+    row.append(a, b, x); stdsEl.appendChild(row);
+  }
+  function getStds() {
+    return Array.prototype.map.call(stdsEl.children, function (r) {
+      var i = r.querySelectorAll('input'); return [i[0].value.trim(), i[1].value.trim()];
+    }).filter(function (s) { return s[0] || s[1]; });
+  }
+
+  /* ---------- state save/restore per template ---------- */
+  function snapshot() {
+    var o = {};
+    Array.prototype.forEach.call(form.elements, function (e) {
+      if (!e.name) return;
+      o[e.name] = e.type === 'checkbox' ? e.checked : e.value;
+    });
+    o.stds = getStds();
+    return o;
+  }
+  function restore(o) {
+    Array.prototype.forEach.call(form.elements, function (e) {
+      if (!e.name) return;
+      var v = o[e.name];
+      if (e.type === 'checkbox') e.checked = !!v; else e.value = v == null ? '' : v;
+    });
+    if (!o.date) $('date').value = today();
+    stdsEl.textContent = '';
+    (o.stds && o.stds.length ? o.stds : [['', '']]).forEach(function (s) { addStd(s[0], s[1]); });
+  }
+
+  function setTemplate(t) {
+    store[tpl] = snapshot();
+    store[tpl].__sample = isSample;
+    tpl = t;
+    document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.tpl === t)); });
+    restore(store[t]);
+    isSample = !!store[t].__sample;
+    update();
+  }
+
+  /* ---------- validation ---------- */
+  var SRN = { MF: /^[A-Z]{2}-MF-\d{9}$/, AR: /^[A-Z]{2}-AR-\d{9}$/ };
+
+  function rules() {
+    var R = [];
+    function req(ok, label, cite, f) { R.push({ s: ok ? 'ok' : 'err', label: label, cite: cite, f: f }); }
+    function first() { for (var i = 0; i < arguments.length; i++) if (!val(arguments[i])) return arguments[i]; return arguments[0]; }
+    function warn(ok, label, cite) { if (!ok) R.push({ s: 'warn', label: label, cite: cite }); }
+    var nbReq = nbRequired();
+
+    if (tpl === 'eee') {
+      var acts = ['lvd', 'emc', 'rohs'].filter(function (a) { return val('act_' + a); });
+      var A = annexCite();
+      req(acts.length > 0, 'At least one applicable Union act selected', A + ', point 5', 'act_lvd');
+      req(!!val('model'), 'Product model / product identified', A + ', point 1', 'model');
+      req(!!val('mname') && !!val('maddr'), 'Name and address of the manufacturer', A + ', point 2', first('mname', 'maddr'));
+      if (val('has_ar')) req(!!val('arname') && !!val('araddr'), 'Name and address of the authorised representative', A + ', point 2', first('arname', 'araddr'));
+      R.push({ s: 'ok', label: 'Sole-responsibility statement', cite: A + ', point 3 (inserted automatically)' });
+      req(!!val('object'), 'Object of the declaration allowing traceability', A + ', point 4', 'object');
+      if (acts.length) R.push({ s: 'ok', label: 'Conformity statement with publication references', cite: 'Art. 15(3) (inserted automatically)' });
+      var stds = getStds();
+      var stdNeeded = val('act_lvd') || val('act_emc');
+      if (stdNeeded) req(stds.some(function (s) { return s[0]; }), 'References to harmonised standards or other specifications', A + ', point 6', 'std');
+      if (val('act_emc')) {
+        var undated = stds.filter(function (s) { return s[0] && !/(19|20)\d{2}/.test(s[0]); });
+        req(undated.length === 0, undated.length ? 'Date missing from: ' + undated.map(function (s) { return s[0]; }).join(', ') : 'Every standard reference includes its date', 'Directive 2014/30/EU, Annex IV, point 6', 'std');
+      }
+    } else {
+      R.push({ s: 'ok', label: 'Statement of sole responsibility of the manufacturer', cite: 'Annex IV, point 2 (inserted automatically)' });
+      req(!!val('mname') && !!val('maddr'), 'Manufacturer name and registered place of business', 'Annex IV, point 1', first('mname', 'maddr'));
+      if (val('msrn')) req(SRN.MF.test(val('msrn')), 'Manufacturer SRN in the format XX-MF-000000000', 'Annex IV, point 1; Art. 31', 'msrn');
+      if (val('non_eu')) {
+        req(!!val('arname') && !!val('araddr'), 'Authorised representative name and address', 'Art. 11(1); Annex IV, point 1', first('arname', 'araddr'));
+        if (val('arsrn')) req(SRN.AR.test(val('arsrn')), 'Authorised representative SRN in the format XX-AR-000000000', 'Annex IV, point 1', 'arsrn');
+      }
+      req(!!val('budi'), 'Basic UDI-DI', 'Annex IV, point 3', 'budi');
+      req(!!val('trade'), 'Product or trade name', 'Annex IV, point 4', 'trade');
+      req(!!val('purpose'), 'Intended purpose', 'Annex IV, point 4', 'purpose');
+      req(!!val('cls'), 'Risk class in accordance with Annex VIII', 'Annex IV, point 5', 'cls');
+      R.push({ s: 'ok', label: 'Statement of conformity with Regulation (EU) 2017/745', cite: 'Annex IV, point 6 (inserted automatically)' });
+    }
+
+    if (nbReq || (val('nb_on') && (tpl === 'mdr' || val('act_emc')))) {
+      var nbOk = !!val('nbname') && /^\d{4}$/.test(val('nbno')) && !!val('nbproc') && !!val('nbcert');
+      req(nbOk, nbReq ? 'Notified body (required for this device): name, 4-digit number, procedure and certificate' : 'Notified body: name, 4-digit number, procedure and certificate',
+          tpl === 'mdr' ? 'Annex IV, point 8; Art. 52' : 'Directive 2014/30/EU, Annex IV, point 7',
+          !val('nbname') ? 'nbname' : !/^\d{4}$/.test(val('nbno')) ? 'nbno' : first('nbproc', 'nbcert'));
+    }
+
+    var sc = tpl === 'mdr' ? 'Annex IV, point 10' : annexCite() + ', signature block';
+    req(!!val('place') && !!val('date'), 'Place and date of issue', sc, first('place', 'date'));
+    req(!!val('signame') && !!val('sigfn'), 'Name and function of the signatory', sc, first('signame', 'sigfn'));
+
+    if (tpl === 'eee' && val('act_lvd') && !val('act_rohs'))
+      warn(false, 'Equipment in scope of the LVD is usually also in scope of RoHS. Check whether Directive 2011/65/EU applies.', 'Directive 2011/65/EU, Art. 2');
+    return R;
+  }
+
+  function nbRequired() {
+    if (tpl !== 'mdr') return false;
+    var c = val('cls');
+    return c === 'IIa' || c === 'IIb' || c === 'III' || (c === 'I' && val('cls1_special'));
+  }
+
+  function annexCite() {
+    if (val('act_emc')) return 'Directive 2014/30/EU, Annex IV';
+    if (val('act_lvd')) return 'Directive 2014/35/EU, Annex IV';
+    if (val('act_rohs')) return 'Directive 2011/65/EU, Annex VI';
+    return 'Annex IV';
+  }
+
+  /* ---------- document ---------- */
+  function item(list, n, head, value) {
+    var li = el('li');
+    li.appendChild(el('span', 'n', n + '.'));
+    var body = el('div');
+    body.appendChild(el('span', 'h', head));
+    if (Array.isArray(value)) {
+      if (value.length) {
+        var ul = el('ul', 'v');
+        value.forEach(function (v) { ul.appendChild(el('li', null, v)); });
+        body.appendChild(ul);
+      } else body.appendChild(el('span', 'v missing', 'Not yet provided'));
+    } else if (value === null) {
+      body.appendChild(el('span', 'v missing', 'Not yet provided'));
+    } else if (value !== undefined) {
+      body.appendChild(el('span', 'v', value));
+    }
+    li.appendChild(body); list.appendChild(li);
+  }
+  function orNull(s) { return s ? s : null; }
+
+  function partyBlock(name, addr, srn) {
+    var p = [];
+    if (name) p.push(name);
+    if (srn) p.push('SRN: ' + srn);
+    if (addr) p.push(addr);
+    return p.length ? p.join('\n') : null;
+  }
+
+  function render(R) {
+    docEl.textContent = '';
+    var hasErr = R.some(function (r) { return r.s === 'err'; });
+    if (hasErr || isSample) {
+      var m = el('div', 'mark' + (hasErr ? '' : ' sample'));
+      m.setAttribute('aria-hidden', 'true');
+      m.appendChild(el('span', null, hasErr ? 'DRAFT' : 'EXAMPLE'));
+      docEl.appendChild(m);
+    }
+    var list = el('ol', 'items');
+    var mfr = partyBlock(val('mname'), val('maddr'), tpl === 'mdr' ? val('msrn') : '');
+    var arOn = tpl === 'mdr' ? val('non_eu') : val('has_ar');
+    var ar = arOn ? partyBlock(val('arname'), val('araddr'), tpl === 'mdr' ? val('arsrn') : '') : '';
+
+    if (tpl === 'eee') {
+      docEl.appendChild(el('h2', null, 'EU DECLARATION OF CONFORMITY'));
+      if (val('docno')) docEl.appendChild(el('p', 'docno', 'No ' + val('docno')));
+      docEl.appendChild(el('hr', 'rule'));
+      var acts = ['lvd', 'emc', 'rohs'].filter(function (a) { return val('act_' + a); }).map(function (a) { return ACTS[a]; });
+      item(list, 1, 'Product model / product (product, type, batch or serial number)', orNull(val('model')));
+      item(list, 2, arOn ? 'Name and address of the manufacturer and of the authorised representative' : 'Name and address of the manufacturer',
+           mfr && arOn ? mfr + '\n\nAuthorised representative:\n' + (ar || '—') : mfr);
+      item(list, 3, 'This declaration of conformity is issued under the sole responsibility of the manufacturer.');
+      item(list, 4, 'Object of the declaration', orNull(val('object')));
+      item(list, 5, 'The object of the declaration described above is in conformity with the relevant Union harmonisation legislation:', acts);
+      var stds = getStds().map(function (s) { return s[0] + (s[1] ? ' ' + s[1] : ''); });
+      var stdHead = val('act_emc')
+        ? 'References to the relevant harmonised standards used, including the date of the standard, or to the other technical specifications, including their date, in relation to which conformity is declared'
+        : 'References to the relevant harmonised standards used or to the other technical specifications in relation to which conformity is declared';
+      var n = 6;
+      item(list, n++, stdHead, stds.length ? stds : ((val('act_lvd') || val('act_emc')) ? [] : 'None'));
+      if (val('act_emc')) {
+        item(list, n++, 'Notified body', val('nb_on')
+          ? (val('nbname') || '—') + ' (' + (val('nbno') || '—') + ') performed ' + (val('nbproc') || '—') + ' and issued the certificate ' + (val('nbcert') || '—') + '.'
+          : 'Not applicable');
+      }
+      item(list, n++, 'Additional information', val('extra') || 'None');
+    } else {
+      docEl.appendChild(el('h2', null, 'EU DECLARATION OF CONFORMITY'));
+      docEl.appendChild(el('p', 'docno', 'Regulation (EU) 2017/745 on medical devices'));
+      docEl.appendChild(el('hr', 'rule'));
+      item(list, 1, val('non_eu') ? 'Manufacturer and authorised representative' : 'Manufacturer',
+           mfr && val('non_eu') ? mfr + '\n\nAuthorised representative:\n' + (ar || '—') : mfr);
+      item(list, 2, 'This EU declaration of conformity is issued under the sole responsibility of the manufacturer.');
+      item(list, 3, 'Basic UDI-DI', orNull(val('budi')));
+      var ident = [];
+      if (val('trade')) ident.push(val('trade'));
+      if (val('code')) ident.push(val('code'));
+      if (val('purpose')) ident.push('Intended purpose: ' + val('purpose'));
+      item(list, 4, 'Product and trade name, identification and intended purpose', val('trade') && val('purpose') ? ident.join('\n') : null);
+      var cls = val('cls') ? 'Class ' + val('cls') + ', in accordance with Annex VIII' + (val('rule') ? ', Rule ' + val('rule').replace(/^rule\s*/i, '') : '') : null;
+      item(list, 5, 'Risk class', cls);
+      var other = lines(val('otherleg'));
+      item(list, 6, 'The device covered by the present declaration is in conformity with ' + ACTS.mdr + (other.length ? ' and with the following Union legislation that provides for the issuing of an EU declaration of conformity:' : '.'), other.length ? other : undefined);
+      var cs = lines(val('cs'));
+      item(list, 7, 'Common specifications (CS) used', cs.length ? cs : 'No common specifications have been used.');
+      var nb;
+      if (nbRequired() || val('nb_on')) {
+        nb = (val('nbname') || '—') + ', identification number ' + (val('nbno') || '—') + '\nConformity assessment procedure: ' + (val('nbproc') || '—') + '\nCertificate(s): ' + (val('nbcert') || '—');
+      } else if (val('cls') === 'I') {
+        nb = 'Not applicable. Conformity is declared under Article 52(7) without notified body involvement.';
+      } else nb = 'Not applicable';
+      item(list, 8, 'Notified body', nb);
+      item(list, 9, 'Additional information', val('extra') || 'None');
+    }
+    docEl.appendChild(list);
+
+    var sig = el('div', 'sig');
+    function cell(lab, v, full) {
+      var c = el('div', full ? 'full' : null);
+      c.appendChild(el('span', 'lab', lab));
+      c.appendChild(el('span', 'line', v || ''));
+      sig.appendChild(c);
+    }
+    cell(tpl === 'mdr' ? '10. Signed for and on behalf of' : 'Signed for and on behalf of', val('behalf') || val('mname'), true);
+    cell('Place of issue', val('place'));
+    cell('Date of issue', fmtDate(val('date')));
+    cell('Name, function', [val('signame'), val('sigfn')].filter(Boolean).join(', '));
+    cell('Signature', '');
+    docEl.appendChild(sig);
+
+  }
+
+  function renderChecklist(R) {
+    var ul = document.getElementById('checklist'); ul.textContent = '';
+    var req = R.filter(function (r) { return r.s !== 'warn'; });
+    var done = req.filter(function (r) { return r.s === 'ok'; }).length;
+    R.slice().sort(function (a, b) { var o = { err: 0, warn: 1, ok: 2 }; return o[a.s] - o[b.s]; }).forEach(function (r) {
+      var li = el('li', r.s);
+      var s = el(r.s === 'err' && r.f ? 'button' : 'span', r.s === 'err' && r.f ? 'fix' : null, r.label);
+      if (s.tagName === 'BUTTON') { s.type = 'button'; s.addEventListener('click', function () { goTo(r.f); }); }
+      var sm = el('small', null, r.cite); if (s.tagName === 'BUTTON') { sm.appendChild(document.createTextNode(' · ')); sm.appendChild(el('b', null, 'Go to field →')); } s.appendChild(sm);
+      li.appendChild(s); ul.appendChild(li);
+    });
+    var missing = req.length - done;
+    document.getElementById('meter').style.width = (req.length ? Math.round(100 * done / req.length) : 0) + '%';
+    var title = missing ? done + ' of ' + req.length + ' required elements complete' : 'All ' + req.length + ' required elements complete';
+    document.getElementById('status-title').textContent = title;
+    document.getElementById('mbar-text').textContent = title;
+    document.getElementById('mbar-meter').style.width = document.getElementById('meter').style.width;
+    lastMissing = missing;
+  }
+
+  function update() {
+    document.querySelectorAll('[data-for]').forEach(function (e) { e.hidden = e.dataset.for !== tpl; });
+    var arOn = tpl === 'mdr' ? val('non_eu') : val('has_ar');
+    document.getElementById('ar').hidden = !arOn;
+    document.getElementById('cls1flags').hidden = !(tpl === 'mdr' && val('cls') === 'I');
+    var nbReq = nbRequired();
+    var showNbSet = tpl === 'mdr' || val('act_emc');
+    document.getElementById('nbset').hidden = !showNbSet;
+    $('nb_on').disabled = nbReq;
+    if (nbReq) $('nb_on').checked = true;
+    document.getElementById('nb').hidden = !(nbReq || val('nb_on'));
+    document.getElementById('nb-cite').textContent = tpl === 'mdr'
+      ? 'Annex IV, point 8. Required for class IIa, IIb and III, and for class I devices covered by Art. 52(7).'
+      : 'Directive 2014/30/EU, Annex IV, point 7, where applicable';
+    document.getElementById('mfr-cite').textContent = tpl === 'mdr' ? 'Annex IV, point 1' : annexCite() + ', point 2';
+    document.getElementById('sig-cite').textContent = tpl === 'mdr' ? 'Annex IV, points 9 and 10' : annexCite() + ', additional information and signature';
+    var R = rules();
+    render(R);
+    renderChecklist(R);
+    markFields(R);
+    save();
+  }
+
+  /* ---------- guidance: field marks, section status, go-to ---------- */
+  var touched = {}, showAll = false, lastMissing = 0;
+  function fieldEl(f) { return f === 'std' ? stdsEl.querySelector('input') : $(f); }
+  function markFields(R) {
+    form.querySelectorAll('.bad').forEach(function (e) { e.classList.remove('bad'); });
+    var errs = R.filter(function (r) { return r.s === 'err' && r.f; });
+    errs.forEach(function (r) {
+      var e = fieldEl(r.f);
+      if (e && (showAll || touched[r.f])) (e.type === 'checkbox' ? e.closest('label') : e).classList.add('bad');
+    });
+    form.querySelectorAll('fieldset').forEach(function (fs) {
+      if (fs.hidden || fs.closest('[hidden]')) return;
+      var open = errs.some(function (r) { var e = fieldEl(r.f); return e && fs.contains(e); });
+      fs.classList.toggle('done', !open); fs.classList.toggle('todo', open);
+    });
+  }
+  function goTo(f) {
+    var e = fieldEl(f); if (!e) return;
+    touched[f] = true;
+    e.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(function () { e.focus({ preventScroll: true }); }, 350);
+    update();
+  }
+  form.addEventListener('focusout', function (ev) { if (ev.target.name) { touched[ev.target.name] = true; markFields(rules()); } });
+
+  /* ---------- draft kept in this browser only ---------- */
+  var KEY = 'virkka-doc-builder-v1', saveTimer = null, ready = false;
+  function save() {
+    if (!ready) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      try {
+        var all = JSON.parse(JSON.stringify(store)); all[tpl] = snapshot(); all[tpl].__sample = isSample;
+        localStorage.setItem(KEY, JSON.stringify({ tpl: tpl, store: all }));
+        var s = document.getElementById('saved'); s.textContent = 'Draft saved in this browser'; s.classList.add('on');
+      } catch (e) { /* storage unavailable: the tool still works, the draft just is not kept */ }
+    }, 400);
+  }
+  function load() {
+    try {
+      var d = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!d || !d.store) return false;
+      store = d.store; tpl = d.tpl === 'mdr' ? 'mdr' : 'eee';
+      document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.tpl === tpl)); });
+      restore(store[tpl] || {}); isSample = !!(store[tpl] || {}).__sample;
+      return true;
+    } catch (e) { return false; }
+  }
+
+  /* ---------- exports ---------- */
+  function docText() {
+    var clone = docEl.cloneNode(true); var m = clone.querySelector('.mark'); if (m) m.remove();
+    var tmp = el('div'); tmp.style.position = 'fixed'; tmp.style.left = '-9999px'; tmp.appendChild(clone); document.body.appendChild(tmp);
+    var t = clone.innerText; tmp.remove(); return t;
+  }
+  function confirmIncomplete(what) {
+    if (!lastMissing) return true;
+    showAll = true; update();
+    return window.confirm(lastMissing + (lastMissing === 1 ? ' required element is' : ' required elements are') + ' still missing. ' + what + ' will be marked as a draft. Continue?');
+  }
+  function downloadWord() {
+    if (!confirmIncomplete('The document')) return;
+    var clone = docEl.cloneNode(true); var m = clone.querySelector('.mark'); if (m) m.remove();
+    var draft = lastMissing ? '<p style="color:#a1322b;font-weight:bold">DRAFT – required elements missing</p>' : '';
+    var css = 'body{font-family:Georgia,serif;font-size:10.5pt;line-height:1.45;color:#111}h2{text-align:center;font-size:15pt;margin:0}.docno{text-align:center;margin:4px 0 0}' +
+      'hr{border:0;border-top:1.5px solid #111;margin:10px 0}ol{list-style:none;margin:0;padding:0}ol>li{padding:6px 0;border-bottom:1px solid #ddd}' +
+      '.n{font-weight:bold;margin-right:6px}.h{font-weight:bold;display:block}.v{display:block;white-space:pre-wrap}ul.v{margin:2px 0 0 14px;padding:0}' +
+      '.sig{margin-top:18px}.sig div{margin:8px 0}.lab{display:block;font-size:8.5pt;color:#555}.line{display:block;border-bottom:1px solid #111;min-height:16pt}.foot{font-size:8pt;color:#666;margin-top:16px}';
+    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>EU declaration of conformity</title><style>' + css + '</style></head><body>' + draft + clone.innerHTML + '</body></html>';
+    var blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+    var a = el('a'); a.href = URL.createObjectURL(blob); a.download = 'EU-declaration-of-conformity.doc';
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  function copyText(btn) {
+    var t = docText();
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { btn.textContent = 'Copied'; })
+      .catch(function () { btn.textContent = 'Copy failed'; });
+    setTimeout(function () { btn.textContent = 'Copy text'; }, 2200);
+  }
+
+  /* ---------- events ---------- */
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  document.querySelectorAll('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () { if (b.dataset.tpl !== tpl) setTemplate(b.dataset.tpl); });
+  });
+  document.getElementById('addstd').addEventListener('click', function () { addStd(); stdsEl.lastChild.querySelector('input').focus(); });
+  document.getElementById('sample').addEventListener('click', function () {
+    var s = JSON.parse(JSON.stringify(SAMPLES[tpl])); s.__sample = true; s.date = today();
+    restore(s); isSample = true; update();
+  });
+  document.getElementById('clear').addEventListener('click', function () {
+    if (!window.confirm('Clear all fields and start a new declaration?')) return;
+    store = { eee: {}, mdr: {} }; touched = {}; showAll = false;
+    restore({}); isSample = false; update();
+  });
+  document.getElementById('print').addEventListener('click', function () { if (confirmIncomplete('The printout')) window.print(); });
+  document.getElementById('word').addEventListener('click', downloadWord);
+  document.getElementById('copytext').addEventListener('click', function () { copyText(this); });
+  document.getElementById('mbar-go').addEventListener('click', function () { document.querySelector('.side').scrollIntoView({ behavior: 'smooth' }); });
+
+  if (!load()) restore({});
+  ready = true;
+  update();
+})();
+</script>
+</body>
+</html>

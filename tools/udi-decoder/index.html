@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UDI Decoder · Virkka</title>
+<meta name="description" content="Paste or scan a GS1 UDI from a medical device label and see the device identifier, lot, serial number and dates, with the check digit and dates validated.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="../../img/logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="../../css/site.css">
+<style>
+.udi { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); gap: clamp(24px, 3.5vw, 48px); align-items: start; }
+.incard { background: var(--white); border: 1px solid var(--line); padding: clamp(22px, 3vw, 34px); position: sticky; top: calc(var(--nav) + 20px); }
+.incard h2 { font: 400 1.15rem/1.3 var(--sans); margin: 0 0 4px; }
+.incard > p { margin: 0 0 18px; color: var(--muted); font-size: .92rem; }
+.incard label { display: block; font-weight: 500; font-size: .95rem; margin-bottom: 8px; }
+#in { width: 100%; min-height: 6.5rem; resize: vertical; font: 400 1rem/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace; padding: 12px 14px; border: 1px solid #c9d2db; background: var(--white); color: var(--ink); }
+#in:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(0,53,128,.12); }
+.examples { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
+.examples small { display: block; font: 500 .7rem/1.3 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.examples button { display: block; width: 100%; text-align: left; background: var(--paper); border: 1px solid var(--line); padding: 10px 12px; margin-top: 8px; cursor: pointer; font: 400 .85rem/1.35 var(--sans); color: var(--text); transition: border-color .2s; }
+.examples button:hover { border-color: var(--brand); }
+.examples button code { display: block; margin-top: 3px; font: 400 .78rem/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--ink); word-break: break-all; }
+.formats { margin-top: 18px; font-size: .84rem; color: var(--muted); }
+.formats summary { cursor: pointer; color: var(--brand); }
+.formats ul { margin: 10px 0 0; padding-left: 1.1rem; }
+.formats li { margin: 4px 0; }
+
+.results { display: grid; gap: 16px; }
+.empty { background: var(--white); border: 1px dashed #c3ccd5; padding: 48px 32px; text-align: center; color: var(--muted); }
+.empty img { width: 220px; height: auto; display: block; margin: 0 auto 18px; }
+.verdict { display: flex; align-items: flex-start; gap: 16px; padding: 22px 26px; background: var(--navy); color: var(--white); border-bottom: 4px solid var(--yellow); }
+.verdict.bad { border-bottom-color: #e0685f; }
+.verdict .mark { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); color: var(--navy); font-weight: 600; }
+.verdict.bad .mark { background: #e0685f; color: #fff; }
+.verdict b { display: block; font: 400 1.2rem/1.3 var(--sans); }
+.verdict span { display: block; margin-top: 4px; font-size: .88rem; color: #b7c6d8; }
+.fields { background: var(--white); border: 1px solid var(--line); }
+.field { display: grid; grid-template-columns: 4.2rem minmax(0, 11rem) minmax(0, 1fr); gap: 4px 18px; padding: 18px 24px; border-top: 1px solid var(--line-soft); align-items: baseline; }
+.field:first-child { border-top: 0; }
+.ai { font: 500 .85rem/1 ui-monospace, Menlo, Consolas, monospace; color: var(--brand); background: #f3f6fa; border: 1px solid var(--line); padding: 6px 8px; text-align: center; }
+.fname { font-weight: 500; font-size: .95rem; }
+.fname small { display: block; font-weight: 400; color: var(--muted); font-size: .8rem; margin-top: 2px; }
+.fval { font: 400 1.02rem/1.4 ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
+.fval .human { display: block; font-family: var(--sans); font-size: .95rem; margin-top: 2px; }
+.fval .note { display: block; font-family: var(--sans); font-size: .82rem; margin-top: 4px; color: var(--muted); }
+.ok { color: #1d7a4a; }
+.err { color: #a1322b; }
+.warnc { color: #8a5a00; }
+.issues { background: #fff6f5; border: 1px solid #f1c9c5; padding: 16px 20px; font-size: .92rem; color: #7a2620; }
+.issues ul { margin: 6px 0 0; padding-left: 1.1rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.actions .button { margin-top: 0; cursor: pointer; font-family: var(--sans); }
+.actions .button:not(.ghost) { border: 0; }
+.cta-box { background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--yellow); padding: 22px 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.cta-box p { margin: 0; max-width: 34rem; color: var(--text); }
+.cta-box b { display: block; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+.cta-box .button { margin-top: 0; }
+.sources { font-size: .82rem; color: var(--muted); }
+@media (max-width: 960px) {
+  .udi { grid-template-columns: 1fr; }
+  .incard { position: static; }
+}
+@media (max-width: 560px) {
+  .field { grid-template-columns: 3.6rem minmax(0, 1fr); }
+  .field .fval { grid-column: 1 / -1; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav" aria-label="Main">
+  <div class="container">
+    <a class="brand" href="../../index.html" aria-label="Virkka home"><img src="../../img/logo-mark.png" alt=""><span>VIRKKA</span></a>
+    <button class="menu-btn" id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
+    <div class="links" id="links">
+      <a href="../../index.html#company">Company</a>
+      <a href="../../index.html#services">Services</a>
+      <a href="../../index.html#tools" class="active">Tools</a>
+      <a href="../../index.html#contact" class="contact-link">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="svc-head">
+  <div class="container">
+    <div class="intro-fade">
+      <p class="crumbs"><a href="../../index.html">Home</a> &nbsp;/&nbsp; <a href="../../index.html#tools">Tools</a></p>
+      <h1>UDI Decoder</h1>
+      <p class="intro">Paste or scan the UDI from a medical device label. The decoder separates the device identifier from the production data, checks the GTIN check digit and the dates, and explains each field.</p>
+    </div>
+    <img class="intro-fade" src="../../img/ill/medical.svg" alt="" width="240" height="200">
+  </div>
+</header>
+
+<main>
+<section class="band">
+  <div class="container udi">
+
+    <div class="incard">
+      <h2>Your UDI</h2>
+      <p>Results update as you type. Nothing is sent anywhere.</p>
+      <label for="in">UDI from the label or a barcode scanner</label>
+      <textarea id="in" spellcheck="false" autocomplete="off" placeholder="(01)09506000134352(17)271231(10)LOT2408A"></textarea>
+      <div class="examples">
+        <small>Examples</small>
+        <button type="button" data-ex="(01)09506000134352(17)271231(10)LOT2408A">Label text with brackets<code>(01)09506000134352(17)271231(10)LOT2408A</code></button>
+        <button type="button" data-ex="]d20109506000134352112501151727013121SN000731">Barcode scanner output<code>]d20109506000134352112501151727013121SN000731</code></button>
+        <button type="button" data-ex="(01)09506000134353(17)251340(10)A1">With errors<code>(01)09506000134353(17)251340(10)A1</code></button>
+      </div>
+      <details class="formats">
+        <summary>Which formats are supported?</summary>
+        <ul>
+          <li>GS1 UDIs written with brackets, as printed under the barcode</li>
+          <li>Raw scanner output, with or without a symbology prefix such as ]d2 or ]C1</li>
+          <li>Separators as the GS character, or typed as &lt;GS&gt;, | or ^</li>
+          <li>A GTIN on its own (8, 12, 13 or 14 digits)</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="results" id="results" aria-live="polite"></div>
+
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container foot-grid">
+    <div class="foot-brand">
+      <a class="brand" href="../../index.html"><img src="../../img/logo-mark.png" alt=""><span>VIRKKA</span></a>
+      <p>AI and automation consulting, and regulatory documentation for medical device manufacturers.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="../../projects/index.html">AI and automation consulting</a>
+      <a href="../../medical-devices/index.html">Medical device regulation</a>
+    </div>
+    <div>
+      <h4>Tools</h4>
+      <a href="../pms-requirements/index.html">MDR Post-Market Surveillance Checker</a>
+      <a href="../declaration-of-conformity/index.html">EU Declaration of Conformity Builder</a>
+      <a href="index.html">UDI Decoder</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <span class="foot-name">Ville Palola, Founder</span>
+      <a href="mailto:sales@virkka.com">sales@virkka.com</a>
+      <address>Jämeräntaival 7C<br>02150 Espoo, Finland</address>
+    </div>
+  </div>
+  <div class="container foot-bottom">
+    <p>© 2026 Virkka</p>
+    <p>Privacy: we process business contact details from public sources and from correspondence only to communicate with companies, and delete them on request (sales@virkka.com). This site uses no cookies or tracking.</p>
+  </div>
+</footer>
+
+<script src="../../js/site.js"></script>
+<script src="udi.js"></script>
+<script>
+(function () {
+  'use strict';
+  var inp = document.getElementById('in'), out = document.getElementById('results');
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function render() {
+    out.textContent = '';
+    var raw = inp.value;
+    if (!raw.trim()) {
+      var e = el('div', 'empty'); var im = el('img'); im.src = '../../img/ill/medical.svg'; im.alt = ''; e.appendChild(im);
+      e.appendChild(el('p', null, 'Paste a UDI, scan a barcode into the box, or try one of the examples.'));
+      out.appendChild(e); return;
+    }
+    var r = UDI.decode(raw, new Date());
+    var v = el('div', 'verdict' + (r.errors.length ? ' bad' : ''));
+    v.appendChild(el('span', 'mark', r.errors.length ? '!' : '✓'));
+    var vt = el('div');
+    vt.appendChild(el('b', null, r.errors.length ? (r.errors.length === 1 ? '1 problem found' : r.errors.length + ' problems found') : (r.kind === 'gtin' ? 'Valid GTIN' : 'Valid GS1 UDI')));
+    vt.appendChild(el('span', null, r.summary));
+    v.appendChild(vt); out.appendChild(v);
+
+    if (r.errors.length) {
+      var iss = el('div', 'issues'); iss.appendChild(el('b', null, 'What is wrong'));
+      var ul = el('ul'); r.errors.forEach(function (x) { ul.appendChild(el('li', null, x)); }); iss.appendChild(ul); out.appendChild(iss);
+    }
+
+    if (r.fields.length) {
+      var box = el('div', 'fields');
+      r.fields.forEach(function (f) {
+        var row = el('div', 'field');
+        row.appendChild(el('span', 'ai', '(' + f.ai + ')'));
+        var n = el('span', 'fname', f.name); n.appendChild(el('small', null, f.role)); row.appendChild(n);
+        var val = el('span', 'fval', f.value);
+        if (f.human) val.appendChild(el('span', 'human ' + (f.state || ''), f.human));
+        if (f.note) val.appendChild(el('span', 'note', f.note));
+        row.appendChild(val); box.appendChild(row);
+      });
+      out.appendChild(box);
+
+      var acts = el('div', 'actions');
+      var cp = el('button', 'button ghost', 'Copy results'); cp.type = 'button';
+      cp.addEventListener('click', function () {
+        var t = r.fields.map(function (f) { return '(' + f.ai + ') ' + f.name + ': ' + f.value + (f.human ? ' (' + f.human + ')' : ''); }).join('\n');
+        if (r.errors.length) t += '\n\nProblems:\n- ' + r.errors.join('\n- ');
+        (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { cp.textContent = 'Copied'; }).catch(function () { cp.textContent = 'Copy failed'; });
+        setTimeout(function () { cp.textContent = 'Copy results'; }, 2200);
+      });
+      acts.appendChild(cp); out.appendChild(acts);
+    }
+
+    var cta = el('div', 'cta-box');
+    var t = el('p'); t.appendChild(el('b', null, 'Checking UDI data at scale?'));
+    t.appendChild(document.createTextNode('We build tools that check label and registration data against EUDAMED and your own systems.'));
+    var a = el('a', 'button', 'Medical device service →'); a.href = '../../medical-devices/index.html';
+    cta.appendChild(t); cta.appendChild(a); out.appendChild(cta);
+    out.appendChild(el('p', 'sources', 'Decoding follows the GS1 General Specifications and the GS1 Barcode Syntax Dictionary for the application identifiers used in medical device UDIs: (01), (10), (11), (17), (21), (240) and (7003). HIBCC and ICCBBA UDIs are not supported.'));
+  }
+
+  inp.addEventListener('input', render);
+  document.querySelectorAll('[data-ex]').forEach(function (b) {
+    b.addEventListener('click', function () { inp.value = b.dataset.ex; render(); inp.focus(); });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

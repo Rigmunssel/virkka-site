@@ -3,97 +3,172 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Virkka</title>
-<meta name="description" content="Virkka prepares the public-data sections of EU MDR Periodic Safety Update Reports: literature review, public databases and similar devices, in the MDCG 2022-21 format.">
+<title>Virkka · AI and automation consulting, medical device regulation</title>
+<meta name="description" content="Virkka is a software company in Espoo, Finland. We automate business workflows with AI agents, algorithms and machine learning, and prepare regulatory documentation for medical device manufacturers.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="img/logo-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style>
-/* Layout: single column company page; the core offer is the three PSUR sections, shown as the template's own headings */
-:root {
-  --paper: #f6f8fa; --ink: #18222e; --muted: #566372; --rule: #d5dde5; --accent: #1f4f8a; --card: #ffffff;
-  --display: "Literata", Georgia, "Times New Roman", serif;
-  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) { :root {
-  --paper: #10161d; --ink: #e3e9ef; --muted: #9aa8b6; --rule: #2a3542; --accent: #8db6ea; --card: #161e27; color-scheme: dark } }
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.62 var(--body); }
-.wrap { max-width: 44rem; margin: 0 auto; padding-inline: 20px; padding-block: 48px 80px; }
-header.top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
-.logo { font: 650 1.35rem/1 var(--display); letter-spacing: .01em; }
-.top a { color: var(--accent); }
-h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.2; margin: 0; }
-h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 650; margin-top: 2.8rem; }
-h2 { font-size: 1.4rem; font-weight: 650; margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); }
-p, ul, ol { margin: .8rem 0 0; }
-li + li { margin-top: .35rem; }
-a { color: var(--accent); text-underline-offset: 2px; }
-.lede { font-size: 1.15rem; color: var(--muted); }
-.ref { font: 500 .8rem/1.4 var(--mono); color: var(--muted); }
-.sections { display: grid; gap: .9rem; margin-top: 1.2rem; }
-.sec { background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: 1rem 1.1rem; }
-.sec .ref { display: block; margin-bottom: .3rem; }
-.sec h3 { font-size: 1.08rem; }
-.sec p { margin-top: .45rem; font-size: .97rem; }
-.price { display: flex; flex-wrap: wrap; gap: .4rem 1.6rem; align-items: baseline; margin-top: 1rem; }
-.price strong { font: 650 1.6rem/1 var(--display); }
-.contact { font-family: var(--mono); font-size: 1rem; user-select: all; }
-footer { margin-top: 3.5rem; color: var(--muted); font-size: .86rem; }
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="css/site.css">
 </head>
-<body>
-<div class="wrap">
-  <header class="top">
-    <span class="logo">Virkka</span>
-    <a href="#contact">Contact</a>
-  </header>
+<body data-page="home">
 
-  <h1>The public-data sections of your PSUR, prepared for you</h1>
-  <p class="lede">For EU MDR manufacturers of Class IIa and IIb devices. We prepare sections (b) to (d) of your Periodic Safety Update Report from public sources, in the MDCG 2022-21 template format, ready to review and paste.</p>
-
-  <h2>What you receive</h2>
-  <div class="sections">
-    <div class="sec">
-      <span class="ref">MDCG 2022-21 Annex I · PMS information (b)</span>
-      <h3>Scientific literature review</h3>
-      <p>Search strategy, screening counts and the relevant publications on your device type for the data collection period, each with its finding type and link.</p>
-    </div>
-    <div class="sec">
-      <span class="ref">MDCG 2022-21 Annex I · PMS information (c)</span>
-      <h3>Public databases and registry data</h3>
-      <p>Adverse-event reports, recalls and field safety notices for similar devices from the FDA, Health Canada and the UK MHRA, with reports about unrelated products and your own reports removed.</p>
-    </div>
-    <div class="sec">
-      <span class="ref">MDCG 2022-21 Annex I · PMS information (d)</span>
-      <h3>Publicly available information about similar devices</h3>
-      <p>Similar devices on the EU market, new devices cleared in the USA with links to their published summaries, conference findings, and the SSCP statement.</p>
+<nav id="nav" aria-label="Main">
+  <div class="container">
+    <a class="brand" href="#top" aria-label="Virkka, back to top"><img src="img/logo-mark.png" alt=""><span>VIRKKA</span></a>
+    <button class="menu-btn" id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
+    <div class="links" id="links">
+      <a href="#company">Company</a>
+      <a href="#services">Services</a>
+      <a href="#tools">Tools</a>
+      <a href="#contact" class="contact-link">Contact</a>
     </div>
   </div>
-  <p>Delivered as a Word file in your PSUR structure, with the query behind every figure so your team or notified body can re-run it. Sales, complaints, your own vigilance data and the benefit-risk conclusion stay with you.</p>
+</nav>
 
-  <h2>Why it matters</h2>
-  <p>MDCG 2025-10 asks manufacturers to actively seek publicly available information about similar devices. Your notified body audits how your post-market surveillance plan is applied at least once every 12 months.</p>
-  <p class="ref">MDR Article 86 · MDR Annex IX §3.3 · MDCG 2022-21 · MDCG 2025-10</p>
+<header class="hero contour" id="top">
+  <canvas aria-hidden="true"></canvas>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="hero-kicker intro-fade">Virkka &nbsp;·&nbsp; Espoo, Finland</p>
+      <h1 class="intro-fade" style="animation-delay:.25s"><span class="mark">AI automation</span> and regulatory documentation</h1>
+      <p class="hero-sub intro-fade" style="animation-delay:.4s">We automate business workflows with AI agents, algorithms and machine learning, and prepare regulatory documentation for medical device manufacturers under the EU MDR.</p>
+      <div class="hero-ctas intro-fade" style="animation-delay:.55s">
+        <a class="button" href="projects/index.html">Describe your project <span aria-hidden="true">→</span></a>
+        <a class="button ghost" href="medical-devices/index.html">Medical device regulation</a>
+      </div>
+    </div>
+    <div class="hero-visual intro-fade" style="animation-delay:.5s" aria-hidden="true">
+      <div class="hv-app">
+        <div class="hv-bar"><i></i><i></i><i></i><span>virkka.com</span></div>
+        <img src="img/tool-doc.jpg" alt="" width="2400" height="1500">
+      </div>
+      <div class="hv-doc"><img src="img/tool-pdf.jpg" alt="" width="820" height="966"></div>
+      <div class="hv-badge"><b>All 9 required elements complete</b><span>Checked against Regulation (EU) 2017/745, Annex IV</span></div>
+    </div>
+  </div>
+  <a class="scroll-cue" href="#company" aria-label="Scroll to content"><span>Scroll</span><i></i></a>
+</header>
 
-  <h2>Pilot pricing</h2>
-  <div class="price"><strong>€900</strong><span>per PSUR group (Basic UDI-DI), then €450 per later update</span></div>
-  <p>We are running a pilot: we send a free two-page sample for one of your device groups first, and you pay only for groups you order.</p>
+<main>
 
-  <h2>About</h2>
-  <p>Virkka is run by Roman, a Finnish engineer working in data automation and quantitative analysis. We build the public-data sections of PSURs with automated search and screening, and every figure is traceable to its source query.</p>
+<section class="band white" id="company">
+  <div class="container media-split">
+    <figure class="photo reveal">
+      <img src="img/oodi-canopy.jpg" alt="The wooden canopy of Oodi library in central Helsinki" width="1200" height="1500" loading="lazy">
+      <figcaption>Oodi, Helsinki · Photo: nika tchokhonelidze / Unsplash</figcaption>
+    </figure>
+    <div class="media-text">
+      <h2 class="title reveal">Company</h2>
+      <p class="lead reveal">Virkka is a software company based in Espoo, Finland. We work with companies that want to automate demanding, rule-heavy work, and with medical device manufacturers that need regulatory documentation for the EU market.</p>
+      <p class="lead reveal">The founders have backgrounds in software engineering, machine learning, robotics and quantitative finance. Before founding Virkka, they built profitable automated trading strategies running on live markets, machine learning models that run in real time on mobile devices, and software products used daily by thousands of people.</p>
+      <p class="lead reveal">We take projects from the first specification to a system in production, and we can maintain the result after delivery.</p>
+    </div>
+  </div>
+</section>
 
-  <h2 id="contact">Contact</h2>
-  <p>Roman, Virkka</p>
-  <p class="contact">roman@virkka.com</p>
+<section class="band" id="services">
+  <div class="container">
+    <h2 class="title reveal">Services</h2>
+    <div class="paths">
+      <a class="path reveal" href="projects/index.html">
+        <img src="img/ill/custom.svg" alt="" width="240" height="200">
+        <h3>AI and automation consulting</h3>
+        <p>Tailored consulting and development for automating your workflows with AI agents, algorithms and machine learning.</p>
+        <span class="go">Describe your project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h17M14 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="path reveal" style="--d:.08s" href="medical-devices/index.html">
+        <img src="img/ill/medical.svg" alt="" width="240" height="200">
+        <h3>Medical device regulation</h3>
+        <p>Regulatory documentation for medical device manufacturers under the EU MDR.</p>
+        <span class="go">View the service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h17M14 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
 
-  <h2 id="privacy">Privacy</h2>
-  <p>We contact manufacturers using the business contact details they publish in EUDAMED, the EU's public medical device database. We keep only your name, business email and our correspondence, use them only to discuss our service, and delete them on request. Write to roman@virkka.com to opt out or to ask what we hold. This website sets no cookies and uses no tracking.</p>
+<section class="band white" id="tools">
+  <div class="container">
+    <h2 class="title reveal" style="margin-bottom:clamp(40px,5vw,64px)">Tools</h2>
+    <div class="tools">
+      <a class="toolcard reveal" href="tools/pms-requirements/index.html">
+        <span class="tc-shot"><img src="img/tool-pms.jpg" alt="The MDR Post-Market Surveillance Checker showing the requirements for a class IIb implantable device" width="2400" height="1500" loading="lazy"></span>
+        <span class="tc-body">
+          <span class="tc-kicker">Free tool · Medical devices</span>
+          <h3>MDR Post-Market Surveillance Checker</h3>
+          <p>Answer three questions about your device and see which surveillance reports the MDR requires, how often they are updated and who receives them, with article references.</p>
+          <span class="go">Open the checker <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h17M14 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+      <a class="toolcard reveal" style="--d:.08s" href="tools/declaration-of-conformity/index.html">
+        <span class="tc-shot"><img src="img/tool-eee.jpg" alt="The EU Declaration of Conformity Builder with the electrical equipment template" width="2400" height="1500" loading="lazy"></span>
+        <span class="tc-body">
+          <span class="tc-kicker">Free tool · CE marking and MDR</span>
+          <h3>EU Declaration of Conformity Builder</h3>
+          <p>Drafts an EU declaration of conformity for electrical equipment or medical devices, shows what is still missing, and downloads it as Word or PDF.</p>
+          <span class="go">Open the builder <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h17M14 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+      <a class="toolcard reveal" style="--d:.16s" href="tools/udi-decoder/index.html">
+        <span class="tc-shot"><img src="img/tool-udi.jpg" alt="The UDI Decoder showing a decoded GS1 UDI with GTIN, expiry date and lot number" width="2400" height="1500" loading="lazy"></span>
+        <span class="tc-body">
+          <span class="tc-kicker">Free tool · Medical devices</span>
+          <h3>UDI Decoder</h3>
+          <p>Paste or scan the UDI from a device label and see the GTIN, lot, serial number and dates, with the check digit and dates validated.</p>
+          <span class="go">Open the decoder <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h17M14 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
 
-  <footer>Virkka · Finland · Company registration in progress.</footer>
-</div>
+<section class="band navy photo-bg" id="contact">
+  <div class="container cgrid">
+    <div class="cgrid-intro">
+      <h2 class="title reveal">Contact</h2>
+      <p class="lead reveal">Email us with a short description of your project.</p>
+    </div>
+    <div class="details cgrid-details reveal">
+      <div><small>Email</small><span><a id="email" href="mailto:sales@virkka.com">sales@virkka.com</a><button class="copy" type="button" id="copy" data-email="sales@virkka.com">Copy</button></span></div>
+      <div><small>Address</small><address>Virkka<br>Jämeräntaival 7C<br>02150 Espoo, Finland</address></div>
+    </div>
+  </div>
+  <span class="credit">Helsinki · Photo: Nedo Raw / Unsplash</span>
+</section>
+
+</main>
+
+<footer>
+  <div class="container foot-grid">
+    <div class="foot-brand">
+      <a class="brand" href="index.html"><img src="img/logo-mark.png" alt=""><span>VIRKKA</span></a>
+      <p>AI and automation consulting, and regulatory documentation for medical device manufacturers.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="projects/index.html">AI and automation consulting</a>
+      <a href="medical-devices/index.html">Medical device regulation</a>
+    </div>
+    <div>
+      <h4>Tools</h4>
+      <a href="tools/pms-requirements/index.html">MDR Post-Market Surveillance Checker</a>
+      <a href="tools/declaration-of-conformity/index.html">EU Declaration of Conformity Builder</a>
+      <a href="tools/udi-decoder/index.html">UDI Decoder</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <span class="foot-name">Ville Palola, Founder</span>
+      <a href="mailto:sales@virkka.com">sales@virkka.com</a>
+      <address>Jämeräntaival 7C<br>02150 Espoo, Finland</address>
+    </div>
+  </div>
+  <div class="container foot-bottom">
+    <p>© 2026 Virkka</p>
+    <p>Privacy: we process business contact details from public sources and from correspondence only to communicate with companies, and delete them on request (sales@virkka.com). This site uses no cookies or tracking.</p>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
 </body>
 </html>
