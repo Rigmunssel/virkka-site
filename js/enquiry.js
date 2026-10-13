@@ -233,17 +233,28 @@
     return { subject: 'Enquiry: ' + n.title + ' (' + (ans.company || '').trim() + ')', body: L.join('\n') };
   }
 
-  function done() {
-    var m = compose();
+  /* Enquiries are delivered by FormSubmit (formsubmit.co) to Virkka's inbox.
+     If the request fails, the visitor can still send the same text by email. */
+  var ENDPOINT = 'https://formsubmit.co/ajax/sales@virkka.com';
+
+  function finish(title, text, extra) {
     body.textContent = '';
     var pane = el('div', 'pane in-fwd sent-pane');
     var tick = el('div', 'sent-tick'); tick.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
     pane.appendChild(tick);
-    pane.appendChild(el('h3', 'pane-title', 'Your enquiry is ready'));
-    var p = el('p', 'pane-sub'); p.textContent = 'Your email program should now open with the enquiry addressed to sales@virkka.com. Press send there to deliver it. If nothing opened, copy the text below and email it to us.';
-    pane.appendChild(p);
+    pane.appendChild(el('h3', 'pane-title', title));
+    pane.appendChild(el('p', 'pane-sub', text));
+    if (extra) pane.appendChild(extra);
+    body.appendChild(pane);
+    document.getElementById('wiz-nav').hidden = true;
+    document.querySelectorAll('#wiz-steps li').forEach(function (li) { li.className = 'done'; });
+    document.getElementById('wiz-bar').style.width = '100%';
+  }
+
+  function fallback(m) {
+    var box = el('div');
     var ta = el('textarea', 'q-input sent-text'); ta.readOnly = true; ta.rows = 10; ta.value = 'To: sales@virkka.com\nSubject: ' + m.subject + '\n\n' + m.body;
-    pane.appendChild(ta);
+    box.appendChild(ta);
     var row = el('div', 'sent-row');
     var copy = el('button', 'wiz-ghost', 'Copy text'); copy.type = 'button';
     copy.addEventListener('click', function () {
@@ -251,13 +262,27 @@
         .catch(function () { ta.select(); copy.textContent = 'Selected'; });
       setTimeout(function () { copy.textContent = 'Copy text'; }, 2500);
     });
-    var again = el('a', 'wiz-ghost', 'Open email again'); again.href = mailto(m);
-    row.appendChild(copy); row.appendChild(again); pane.appendChild(row);
-    body.appendChild(pane);
-    document.getElementById('wiz-nav').hidden = true;
-    document.querySelectorAll('#wiz-steps li').forEach(function (li) { li.className = 'done'; });
-    document.getElementById('wiz-bar').style.width = '100%';
-    window.location.href = mailto(m);
+    var mail = el('a', 'wiz-ghost', 'Open in email'); mail.href = mailto(m);
+    row.appendChild(copy); row.appendChild(mail); box.appendChild(row);
+    return box;
+  }
+
+  function done() {
+    var m = compose();
+    var trap = document.getElementById('wiz-hp');
+    if (trap && trap.value) { finish('Thank you', 'Your enquiry has been sent.'); return; }   // spam bot: drop silently
+    next.disabled = true; back.disabled = true;
+    next.innerHTML = 'Sending…';
+    var payload = { _subject: m.subject, _template: 'box', _captcha: 'false',
+      name: (ans.name || '').trim(), email: (ans.email || '').trim(), company: (ans.company || '').trim(), enquiry: m.body };
+    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return r.ok && String(j.success) === 'true'; }); })
+      .catch(function () { return false; })
+      .then(function (ok) {
+        next.disabled = false; back.disabled = false;
+        if (ok) finish('Thank you, your enquiry has been sent', 'We will reply to ' + payload.email + '.');
+        else finish('Your enquiry could not be sent automatically', 'Please send it to us by email instead. The text below is ready to copy, or open it directly in your email program.', fallback(m));
+      });
   }
   function mailto(m) { return 'mailto:sales@virkka.com?subject=' + encodeURIComponent(m.subject) + '&body=' + encodeURIComponent(m.body); }
 
