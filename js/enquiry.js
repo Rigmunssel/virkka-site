@@ -21,13 +21,6 @@
         { id: 'today', type: 'one', label: 'Who prepares them today?', opts: ['Our own staff', 'An external consultant', 'Not done yet'] },
         { id: 'sources', type: 'many', label: 'Where does the required data come from?', opts: SOURCES }
       ] },
-    { id: 'ai', icon: 'ai', title: 'AI assistant or agent', hint: 'A tool that answers, drafts or acts for your team',
-      q: [
-        { id: 'task', type: 'long', req: true, label: 'What should the AI tool do?', ph: 'For example: answer customer questions using our product manuals, and hand over to a person when unsure.' },
-        { id: 'users', type: 'one', req: true, label: 'Who will use it?', opts: ['Our employees', 'Our customers', 'Both'] },
-        { id: 'aisources', type: 'many', label: 'Which information should it use?', opts: ['Documents and manuals', 'Databases', 'Email', 'Website content', 'Other systems'] },
-        { id: 'personal', type: 'one', label: 'Does that information include personal data?', opts: ['Yes', 'No', 'Not sure'], noOther: true }
-      ] },
     { id: 'documents', icon: 'documents', title: 'Document processing and search', hint: 'Extract, search, sort or check documents',
       q: [
         { id: 'doctypes', type: 'many', req: true, label: 'What kind of documents?', opts: ['PDF files', 'Scanned paper', 'Word or Excel files', 'Emails', 'Images'] },
@@ -41,9 +34,23 @@
         { id: 'where', type: 'many', label: 'Where is the data stored?', opts: ['Spreadsheets', 'Database or data warehouse', 'ERP system', 'Other'] },
         { id: 'decision', type: 'text', label: 'Which decision will the result support?', ph: 'Optional' }
       ] },
-    { id: 'modernise', icon: 'modernise', title: 'Modernise an existing system or website', hint: 'Rebuild or improve something you already have',
+    { id: 'ai', icon: 'ai', title: 'AI assistant or agent', hint: 'A tool that answers, drafts or acts for your team',
       q: [
-        { id: 'what', type: 'text', req: true, label: 'Which system or website?', ph: 'Name or web address' },
+        { id: 'task', type: 'long', req: true, label: 'What should the AI tool do?', ph: 'For example: answer customer questions using our product manuals, and hand over to a person when unsure.' },
+        { id: 'users', type: 'one', req: true, label: 'Who will use it?', opts: ['Our employees', 'Our customers', 'Both'] },
+        { id: 'aisources', type: 'many', label: 'Which information should it use?', opts: ['Documents and manuals', 'Databases', 'Email', 'Website content', 'Other systems'] },
+        { id: 'personal', type: 'one', label: 'Does that information include personal data?', opts: ['Yes', 'No', 'Not sure'], noOther: true }
+      ] },
+    { id: 'websec', icon: 'websec', title: 'Website security or redesign', hint: 'Check how secure your site is, or rebuild it',
+      q: [
+        { id: 'site', type: 'text', req: true, label: 'Website address', ph: 'For example: www.example.com' },
+        { id: 'want', type: 'one', req: true, label: 'What would you like?', opts: ['A security review with recommendations', 'A redesign of the site', 'Both', 'Not sure yet'], noOther: true },
+        { id: 'platform', type: 'one', label: 'What is the site built with?', opts: ['WordPress', 'Wix or Squarespace', 'Shopify', 'Custom-built', 'Not sure'] },
+        { id: 'concern', type: 'long', label: 'Anything specific that concerns you?', ph: 'For example: the site is slow, it was hacked before, or nobody has updated it in years.' }
+      ] },
+    { id: 'modernise', icon: 'modernise', title: 'Modernise an existing system', hint: 'Rebuild or improve software you already have',
+      q: [
+        { id: 'what', type: 'text', req: true, label: 'Which system?', ph: 'Name or short description' },
         { id: 'problems', type: 'many', req: true, label: 'What are the main problems?', opts: ['Slow', 'Hard to update', 'Outdated design', 'Does not work well on phones', 'Security concerns', 'Hard to connect to other systems'] },
         { id: 'stack', type: 'text', label: 'Technology used, if you know it', ph: 'Optional' }
       ] },
