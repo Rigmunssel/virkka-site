@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Data Processing and Confidentiality Statement · Virkka</title>
-<meta name="description" content="How Virkka Oy handles the documents and data that clients send for regulatory services: purpose, confidentiality, GDPR roles, sub-processors and deletion.">
+<meta name="description" content="Data Processing and Confidentiality Statement of Virkka Oy for regulatory services: purpose limitation, confidentiality, processing of personal data under Article 28 GDPR, sub-processors, retention and deletion.">
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="../img/logo-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,16 +13,20 @@
 <link rel="stylesheet" href="../css/site.css">
 <style>
 .legal { max-width: 46rem; }
-.legal .meta { color: var(--muted); font-size: .92rem; margin: 0 0 36px; }
-.legal h2 { font: 400 1.25rem/1.3 var(--sans); margin: 40px 0 10px; }
-.legal p, .legal li { color: var(--text); line-height: 1.75; }
-.legal ul { padding-left: 1.2rem; }
-.legal table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: .95rem; }
-.legal td, .legal th { border-bottom: 1px solid var(--line); padding: 8px 10px 8px 0; text-align: left; vertical-align: top; }
-.legal th { font-weight: 500; }
-.legal .glance { background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--yellow); padding: 6px 28px 14px; margin-bottom: 8px; }
-.legal .glance h2 { margin-top: 18px; }
+.legal .meta { color: var(--muted); font-size: .92rem; margin: 0 0 28px; }
+.legal h2 { font: 500 1.05rem/1.4 var(--sans); margin: 36px 0 10px; }
+.legal h2.annex { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); }
+.legal p, .legal li { color: var(--text); line-height: 1.7; }
+.legal p { margin: 0 0 10px; }
+.legal .cl { padding-left: 2.6rem; text-indent: -2.6rem; }
+.legal .cl .n { display: inline-block; width: 2.6rem; text-indent: 0; }
+.legal .party { line-height: 1.9; }
+.legal ol.al { list-style: lower-alpha; margin: 0 0 10px; padding-left: 4.2rem; }
+.legal ol.al li { padding-left: .3rem; }
 .legal .tw { overflow-x: auto; }
+.legal table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: .93rem; }
+.legal td, .legal th { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+.legal th { font-weight: 500; background: var(--white); }
 </style>
 </head>
 <body>
@@ -43,9 +47,8 @@
 <header class="svc-head">
   <div class="container">
     <div class="intro-fade">
-      <p class="crumbs"><a href="../index.html">Home</a> &nbsp;/&nbsp; <a href="../medical-devices/index.html">Medical device regulation</a></p>
+      <p class="crumbs"><a href="../index.html">Home</a> &nbsp;/&nbsp; Legal</p>
       <h1>Data Processing and Confidentiality Statement</h1>
-      <p class="intro">How we handle the documents and data you send us for a service.</p>
     </div>
   </div>
 </header>
@@ -53,91 +56,93 @@
 <main>
 <section class="band">
   <div class="container legal">
-    <p class="meta">Version 1.1 · Last updated 20 October 2026</p>
+    <p class="meta">Version 1.0 – published on 20 October 2026</p>
 
-    <div class="glance">
-      <h2>At a glance</h2>
-      <ul>
-        <li>We use your documents only to deliver the service you ordered, and keep them confidential.</li>
-        <li>For personal data in your documents, you are the controller and we are your processor under Article 28 GDPR. We sign your NDA or a data processing agreement on request.</li>
-        <li>We delete your documents within 30 days of delivery and confirm the deletion in writing on request.</li>
-        <li>You upload to EUDAMED yourself. We never ask for your EU Login or EUDAMED credentials.</li>
-        <li>We notify you of a security incident without undue delay, and no later than 72 hours after we become aware of it.</li>
-      </ul>
-    </div>
+    <p>This Data Processing and Confidentiality Statement (the “<b>Statement</b>”) describes how Virkka Oy (“<b>Virkka</b>”, “we”, “us”) processes and protects the information that a customer (the “<b>Customer</b>”, “you”) provides to Virkka for regulatory services, including the preparation of EUDAMED device registration data and post-market surveillance documentation (the “<b>Services</b>”).</p>
+    <p>Where Virkka and the Customer have entered into a separate non-disclosure agreement or data processing agreement, that agreement prevails over this Statement to the extent of any conflict.</p>
 
-    <h2>1. About this statement</h2>
-    <p>This statement describes how Virkka Oy handles the documents and data that clients send us for regulatory services, such as EUDAMED legacy device registration and post-market surveillance data. If we have signed a non-disclosure agreement or data processing agreement with you, that agreement prevails over this statement where the two differ.</p>
+    <h2>1.&nbsp;&nbsp;Definitions</h2>
+    <p class="cl"><span class="n">1.1</span>“<b>Customer Materials</b>” means all documents and data provided by or on behalf of the Customer in connection with the Services, including price lists, product lists, certificates, declarations of conformity, instructions for use and labelling.</p>
+    <p class="cl"><span class="n">1.2</span>“<b>Deliverables</b>” means the files and documents that Virkka prepares for the Customer on the basis of Customer Materials, including EUDAMED upload files and review workbooks.</p>
+    <p class="cl"><span class="n">1.3</span>“<b>Personal Data</b>”, “<b>Controller</b>”, “<b>Processor</b>”, “<b>Processing</b>” and “<b>Personal Data Breach</b>” have the meanings given to them in Article 4 of Regulation (EU) 2016/679 (the “<b>GDPR</b>”).</p>
+    <p class="cl"><span class="n">1.4</span>“<b>Sub-processor</b>” means a third party engaged by Virkka that processes Customer Materials on Virkka’s behalf.</p>
 
-    <h2>2. Who we are</h2>
-    <table>
-      <tr><th>Company</th><td>Virkka Oy</td></tr>
-      <tr><th>Business ID</th><td>3660320-9 (Finnish Trade Register)</td></tr>
-      <tr><th>Registered address</th><td>Jämeräntaival 7C, 02150 Espoo, Finland</td></tr>
-      <tr><th>Privacy contact</th><td>Ville Palola, Founder · ville.palola@virkka.com</td></tr>
-    </table>
+    <h2>2.&nbsp;&nbsp;Company details</h2>
+    <p class="party"><b>Company:</b> Virkka Oy<br><b>Business ID:</b> 3660320-9<br><b>Registered office:</b> Jämeräntaival 7C, 02150 Espoo, Finland<br><b>Data protection contact:</b> Ville Palola, ville.palola@virkka.com</p>
 
-    <h2>3. Definitions</h2>
-    <table>
-      <tr><th>Client Materials</th><td>Documents and data you send us, such as price lists, product lists, certificates, declarations of conformity, instructions for use and labels.</td></tr>
-      <tr><th>Deliverables</th><td>What we produce for you from the Client Materials, such as EUDAMED upload files, review workbooks and reports.</td></tr>
-      <tr><th>Personal Data</th><td>Information about an identified or identifiable person, as defined in Article 4 of the General Data Protection Regulation (EU) 2016/679 (GDPR).</td></tr>
-      <tr><th>Services</th><td>The work you have ordered from us.</td></tr>
-    </table>
+    <h2>3.&nbsp;&nbsp;Purpose limitation</h2>
+    <p class="cl"><span class="n">3.1</span>Virkka processes Customer Materials only for the purpose of providing the Services and only on the documented instructions of the Customer, unless required to do otherwise by Union or Member State law.</p>
+    <p class="cl"><span class="n">3.2</span>Virkka does not use Customer Materials for its own purposes, including marketing, the provision of services to other customers or the compilation of data sets.</p>
 
-    <h2>4. Purpose limitation</h2>
-    <p>We use Client Materials only to deliver the Services. We do not use them for marketing, for work for other clients, or to build data sets for anyone else.</p>
+    <h2>4.&nbsp;&nbsp;Confidentiality</h2>
+    <p class="cl"><span class="n">4.1</span>Virkka keeps Customer Materials and Deliverables confidential and does not disclose them to any third party, except to the Sub-processors listed in Annex 1 to the extent necessary to provide the Services, or where disclosure is required by law.</p>
+    <p class="cl"><span class="n">4.2</span>Virkka ensures that persons authorised to process Customer Materials have committed themselves to confidentiality or are under an appropriate statutory obligation of confidentiality.</p>
+    <p class="cl"><span class="n">4.3</span>At the Customer’s request, Virkka will sign the Customer’s non-disclosure agreement before any Customer Materials are provided.</p>
 
-    <h2>5. Confidentiality</h2>
-    <p>We treat Client Materials and Deliverables as confidential. Everyone at Virkka who works on your project is bound by confidentiality. We disclose Client Materials only to the sub-processors in section 10, as far as needed to deliver the Services, or where the law requires it. On request we sign your non-disclosure agreement before you send anything.</p>
+    <h2>5.&nbsp;&nbsp;Processing of Personal Data</h2>
+    <p class="cl"><span class="n">5.1</span>Customer Materials may contain Personal Data, such as the names, signatures and business contact details of the Customer’s personnel. With respect to such Personal Data, the Customer acts as Controller and Virkka acts as Processor. The processing is described in Annex 2.</p>
+    <p class="cl"><span class="n">5.2</span>Virkka processes such Personal Data in accordance with Article 28(3) GDPR. At the Customer’s request, the parties will enter into a data processing agreement based on the standard contractual clauses adopted by Commission Implementing Decision (EU) 2021/915.</p>
+    <p class="cl"><span class="n">5.3</span>Taking into account the nature of the processing, Virkka assists the Customer in responding to requests from data subjects to exercise their rights under the GDPR.</p>
+    <p class="cl"><span class="n">5.4</span>The Services do not require data concerning health, other special categories of Personal Data within the meaning of Article 9 GDPR, or any data concerning patients. The Customer shall not provide such data. If Virkka receives such data, Virkka will delete it and notify the Customer.</p>
+    <p class="cl"><span class="n">5.5</span>Virkka acts as Controller for the business contact details it uses to communicate with the Customer, as described in the privacy notice on this website.</p>
 
-    <h2>6. Our role under the GDPR</h2>
-    <p>Client Materials may contain Personal Data, such as the names, signatures or contact details of your staff. For that data you are the controller and Virkka Oy is the processor. We process it only on your documented instructions and in line with Article 28(3) GDPR. On request we sign a data processing agreement based on the European Commission's standard contractual clauses between controllers and processors (Commission Implementing Decision (EU) 2021/915), and we help you respond to requests from data subjects. For the business contact details we use to communicate with you, Virkka Oy is the controller, as described in the privacy notice at the foot of this website.</p>
+    <h2>6.&nbsp;&nbsp;Use of automated tools</h2>
+    <p class="cl"><span class="n">6.1</span>Virkka uses software tools, including artificial intelligence services, to extract data from Customer Materials. Such services are used only under commercial terms that include a data processing agreement and that prohibit the provider from using Customer Materials to train its models. Customer Materials are not processed with consumer AI applications.</p>
+    <p class="cl"><span class="n">6.2</span>Each value in a Deliverable is referenced to the Customer Material from which it was derived. Virkka reviews each Deliverable before delivery.</p>
 
-    <h2>7. Patient and health data</h2>
-    <p>Our Services do not need patient data or health data of any person. Please remove such data before sending documents. If we receive it, we delete it and tell you.</p>
+    <h2>7.&nbsp;&nbsp;Security of processing</h2>
+    <p class="cl"><span class="n">7.1</span>Virkka implements appropriate technical and organisational measures to protect Customer Materials against accidental or unlawful destruction, loss, alteration, unauthorised disclosure or access. These measures include:</p>
+    <ol class="al">
+      <li>restricting access to Customer Materials to personnel assigned to the Customer’s project;</li>
+      <li>storing Customer Materials in Google Workspace, which encrypts data in transit and at rest; and</li>
+      <li>not publishing Customer Materials or sharing them by means of publicly accessible links.</li>
+    </ol>
 
-    <h2>8. Use of AI tools</h2>
-    <p>We use AI software to read Client Materials and extract the data a Deliverable needs. We process Client Materials only through AI services used under commercial terms that include a data processing agreement and do not allow the provider to train its models on our clients' content. We do not use consumer AI apps for Client Materials. Every value in a Deliverable is linked to the document it came from, and we check Deliverables before we send them.</p>
+    <h2>8.&nbsp;&nbsp;Sub-processors</h2>
+    <p class="cl"><span class="n">8.1</span>Virkka engages the Sub-processors listed in Annex 1.</p>
+    <p class="cl"><span class="n">8.2</span>Virkka informs the Customer in writing of any intended addition or replacement of a Sub-processor at least ten (10) days in advance, giving the Customer the opportunity to object to such changes.</p>
+    <p class="cl"><span class="n">8.3</span>Where a Sub-processor processes Personal Data outside the European Economic Area, the transfer is governed by the standard contractual clauses adopted by the European Commission, as stated in Annex 1.</p>
 
-    <h2>9. Security measures</h2>
-    <ul>
-      <li>Access to Client Materials is limited to the people at Virkka working on your project.</li>
-      <li>Our email and file storage provider encrypts data in transit and at rest.</li>
-      <li>We never place Client Materials on a public website or share them through public links.</li>
-    </ul>
+    <h2>9.&nbsp;&nbsp;Security incidents</h2>
+    <p class="cl"><span class="n">9.1</span>Virkka notifies the Customer without undue delay, and in any event within seventy-two (72) hours, after becoming aware of a breach of security affecting Customer Materials, including a Personal Data Breach. The notification contains the information the Customer needs to meet its obligations under Articles 33 and 34 GDPR.</p>
 
-    <h2>10. Sub-processors</h2>
-    <table>
-      <tr><th>Provider</th><th>Purpose</th><th>Location</th><th>Safeguard for transfers outside the EEA</th></tr>
-      <tr><td>Google (Google Workspace)</td><td>Email and file storage</td><td>Google data centres in the EU and other regions</td><td>EU standard contractual clauses in Google's data processing terms</td></tr>
-      <tr><td>Anthropic (Claude API, Commercial Terms)</td><td>AI-assisted extraction of data from documents</td><td>United States</td><td>EU standard contractual clauses in Anthropic's data processing terms</td></tr>
-    </table>
-    <p>We give clients with an active project at least 10 days' notice before a new sub-processor handles their Client Materials, and they may object before the change.</p>
+    <h2>10.&nbsp;&nbsp;Retention and deletion</h2>
+    <p class="cl"><span class="n">10.1</span>Virkka deletes Customer Materials, including copies held in email, within thirty (30) days of delivery of the Deliverables, or earlier at the Customer’s request.</p>
+    <p class="cl"><span class="n">10.2</span>Virkka retains copies of Deliverables only at the Customer’s request.</p>
+    <p class="cl"><span class="n">10.3</span>Invoices and accounting records are retained as required by the Finnish Accounting Act (1336/1997).</p>
+    <p class="cl"><span class="n">10.4</span>At the Customer’s request, Virkka confirms the deletion in writing.</p>
 
-    <h2>11. Retention and deletion</h2>
-    <table>
-      <tr><th>Data</th><th>Retention</th></tr>
-      <tr><td>Client Materials and working files, including copies in email</td><td>Deleted within 30 days of delivery, or sooner on request</td></tr>
-      <tr><td>Deliverables</td><td>Kept only if you ask us to</td></tr>
-      <tr><td>Invoices and accounting records</td><td>As the Finnish Accounting Act (1336/1997) requires</td></tr>
-    </table>
-    <p>On request we confirm the deletion in writing.</p>
+    <h2>11.&nbsp;&nbsp;Audits and supplier qualification</h2>
+    <p class="cl"><span class="n">11.1</span>Virkka makes available to the Customer the information necessary to demonstrate compliance with Article 28 GDPR and this Statement, and allows for and contributes to audits conducted by the Customer or an auditor mandated by the Customer, subject to reasonable prior notice.</p>
+    <p class="cl"><span class="n">11.2</span>Virkka completes supplier qualification questionnaires required under the Customer’s quality management system.</p>
 
-    <h2>12. Security incidents</h2>
-    <p>If we become aware of a breach affecting Client Materials or Personal Data, we notify you without undue delay, and no later than 72 hours after we become aware of it, with the information you need to meet your own obligations.</p>
+    <h2>12.&nbsp;&nbsp;EUDAMED access</h2>
+    <p class="cl"><span class="n">12.1</span>The Customer submits data to EUDAMED using its own EU Login credentials. Virkka does not request, hold or use the Customer’s EU Login or EUDAMED credentials and does not submit data to EUDAMED on the Customer’s behalf.</p>
 
-    <h2>13. Supplier qualification and audits</h2>
-    <p>We complete supplier qualification questionnaires for your quality management system on request, and provide the information you need to show that our processing meets Article 28 GDPR.</p>
+    <h2>13.&nbsp;&nbsp;Changes to this Statement</h2>
+    <p class="cl"><span class="n">13.1</span>Virkka may amend this Statement. The current version is published at virkka.com/data-processing. Customers with an ongoing project are informed of material changes before they take effect.</p>
 
-    <h2>14. Your control over EUDAMED</h2>
-    <p>You upload EUDAMED files yourself, with your own EU Login. We never ask for your EU Login or EUDAMED credentials and never submit anything to EUDAMED on your behalf.</p>
+    <h2>14.&nbsp;&nbsp;Governing law and supervisory authority</h2>
+    <p class="cl"><span class="n">14.1</span>This Statement is governed by the laws of Finland.</p>
+    <p class="cl"><span class="n">14.2</span>The competent supervisory authority is the Office of the Data Protection Ombudsman (Tietosuojavaltuutetun toimisto), www.tietosuoja.fi.</p>
+    <p class="cl"><span class="n">14.3</span>Questions concerning this Statement may be addressed to ville.palola@virkka.com.</p>
 
-    <h2>15. Changes to this statement</h2>
-    <p>We publish each new version on this page with its date. We tell clients with an active project about material changes before they apply to their Client Materials.</p>
+    <h2 class="annex">Annex 1 – List of Sub-processors</h2>
+    <div class="tw"><table>
+      <tr><th>Sub-processor</th><th>Service</th><th>Location of processing</th><th>Transfer mechanism</th></tr>
+      <tr><td>Google (Google Workspace)</td><td>Email and file storage</td><td>European Union and other locations</td><td>Standard contractual clauses (Google Cloud Data Processing Addendum)</td></tr>
+      <tr><td>Anthropic (Claude API)</td><td>Extraction of data from documents</td><td>United States</td><td>Standard contractual clauses (Anthropic Data Processing Addendum)</td></tr>
+    </table></div>
 
-    <h2>16. Governing law, complaints and contact</h2>
-    <p>This statement is governed by Finnish law. You may lodge a complaint with the Office of the Data Protection Ombudsman in Finland (tietosuoja.fi). For questions, deletion requests, or to sign an NDA or data processing agreement, email ville.palola@virkka.com.</p>
+    <h2 class="annex">Annex 2 – Description of the processing</h2>
+    <div class="tw"><table>
+      <tr><th>Data subjects</th><td>Personnel of the Customer and of its suppliers or authorised representatives named in Customer Materials</td></tr>
+      <tr><th>Categories of Personal Data</th><td>Names, job titles, signatures and business contact details</td></tr>
+      <tr><th>Special categories of data</th><td>None</td></tr>
+      <tr><th>Nature of the processing</th><td>Storage, extraction of data and preparation of Deliverables</td></tr>
+      <tr><th>Purpose</th><td>Provision of the Services</td></tr>
+      <tr><th>Duration</th><td>Until deletion in accordance with clause 10</td></tr>
+    </table></div>
   </div>
 </section>
 </main>
